@@ -33,6 +33,7 @@
             color: var(--text-light);
             line-height: 1.6;
             background-attachment: fixed;
+            min-height: 100vh;
         }
 
         /* --- ШАПКА --- */
@@ -40,6 +41,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px 15px;
+            position: relative; /* Для позиционирования меню */
         }
 
         .top-bar {
@@ -57,10 +59,11 @@
             justify-content: space-between;
             align-items: center;
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            padding: 12px 35px;
+            padding: 12px 30px;
             border-radius: 100px;
             border: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 1001; /* Выше выпадающего списка */
         }
 
         .logo {
@@ -70,6 +73,7 @@
             background: linear-gradient(45deg, #fff, var(--accent-seafoam));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            white-space: nowrap;
         }
 
         .nav-links {
@@ -95,137 +99,130 @@
             font-size: 18px;
         }
 
-        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
+        .hamburger { 
+            display: none; 
+            background: none; 
+            border: none; 
+            color: #fff; 
+            font-size: 24px; 
+            cursor: pointer; 
+        }
 
         .cart-badge {
             background: var(--glass-border);
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 14px;
+            white-space: nowrap;
         }
 
+        /* --- КАТЕГОРИИ --- */
         .categories {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
         .cat-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
-            padding: 10px 18px;
-            font-size: 12px;
+            padding: 8px 12px;
+            font-size: 11px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.8);
             transition: 0.3s;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
         }
 
-        .cat-item svg { width: 22px; height: 22px; }
-        .cat-item:hover { color: #fff; transform: translateY(-2px); }
+        .cat-item svg { width: 18px; height: 18px; }
+        .cat-item:hover { color: #fff; background: rgba(255,255,255,0.1); }
 
         /* --- FAQ SECTION --- */
         .faq-container {
-            max-width: 1000px;
-            margin: 60px auto;
-            padding: 0 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
         }
 
         h1.faq-title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 40px;
-            letter-spacing: 1px;
+            margin-bottom: 30px;
+            text-align: center;
         }
 
         .faq-item {
             background: rgba(255, 255, 255, 0.04);
             border-radius: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             border: 1px solid var(--glass-border);
-            overflow: hidden;
         }
 
         summary {
-            padding: 25px 30px;
+            padding: 20px 25px;
             list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* Іконка стрілочки */
         summary::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-right: 2px solid #fff;
-            border-bottom: 2px solid #fff;
-            transform: rotate(45deg);
+            content: '+';
+            font-size: 20px;
             transition: 0.3s;
         }
 
         details[open] summary::after {
-            transform: rotate(-135deg);
+            transform: rotate(45deg);
         }
 
         .faq-content {
-            padding: 0 30px 30px 30px;
-            color: #bbb;
-            font-size: 15px;
-            line-height: 1.7;
+            padding: 0 25px 25px;
+            color: #ccc;
+            font-size: 14px;
         }
 
-        .faq-content strong { color: #fff; }
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 992px) {
+            .nav-links { display: none; } /* Прячем обычные ссылки */
+            
+            .hamburger { display: block; order: 2; }
+            .nav-icons { order: 3; }
+            .logo { order: 1; }
 
-        ul { padding-left: 20px; margin-top: 10px; }
-        li { margin-bottom: 8px; }
+            /* Мобильное меню */
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 75px;
+                left: 15px;
+                right: 15px;
+                background: #162f4a;
+                padding: 20px;
+                border-radius: 20px;
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                z-index: 1000;
+            }
+        }
 
-        @media (max-width: 768px) {
-            header { padding: 15px 10px; }
-            .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
-            .navbar { padding: 10px 20px; flex-wrap: wrap; }
+        @media (max-width: 600px) {
+            .top-bar { display: none; } /* Экономим место на мобилках */
+            .navbar { padding: 10px 20px; border-radius: 20px; }
             .logo { font-size: 18px; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; z-index: 1000; }
-            .nav-links.active { display: flex; }
-            .nav-links a { font-size: 16px; padding: 10px 0; }
-            .hamburger { display: block; }
-            .nav-icons { gap: 15px; }
-            .delivery-content { padding: 20px 15px; }
-            .delivery-content h1 { font-size: 28px; }
-            .delivery-content h2 { font-size: 22px; margin-top: 30px; }
-            .delivery-content p { font-size: 14px; }
-            .faq-content { padding: 20px 15px; }
-            .faq-content h2 { font-size: 22px; }
-            .faq-item { margin-bottom: 20px; }
-            .faq-question { font-size: 16px; padding: 15px; }
-            .faq-answer { font-size: 14px; padding: 15px; }
-        }
-
-        @media (max-width: 480px) {
-            .navbar { padding: 8px 15px; }
-            .logo { font-size: 16px; }
-            .nav-links { padding: 15px; }
-            .nav-links a { font-size: 14px; }
-            .nav-icons { gap: 12px; font-size: 16px; }
-            .cart-badge { padding: 3px 8px; font-size: 12px; }
-            .delivery-content { padding: 15px 10px; }
-            .delivery-content h1 { font-size: 24px; }
-            .delivery-content h2 { font-size: 20px; margin-top: 25px; }
-            .delivery-content p { font-size: 13px; }
-            .faq-content { padding: 15px 10px; }
-            .faq-content h2 { font-size: 20px; }
-            .faq-item { margin-bottom: 15px; }
-            .faq-question { font-size: 14px; padding: 12px; }
-            .faq-answer { font-size: 13px; padding: 12px; }
+            .categories { gap: 8px; }
+            .cat-item { font-size: 10px; padding: 6px 10px; }
+            h1.faq-title { font-size: 24px; margin-top: 20px; }
         }
     </style>
 </head>
@@ -234,23 +231,24 @@
     <header>
         <div class="top-bar">
             <span>Перший центр легального задоволення</span>
-            <span>+38 (073) 625-44-64 &nbsp; IG • TK • YT • TG</span>
+            <span>+38 (073) 625-44-64</span>
         </div>
 
         <nav class="navbar">
             <div class="logo">ENERGY BAR</div>
-            <ul class="nav-links">
-                <li><a href="index.html" onclick="closeMenu()">Головна</a></li>
+            
+            <ul class="nav-links" id="mobileMenu">
+                <li><a href="#" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#" onclick="closeMenu()">Магазин</a></li>
                 <li><a href="#" onclick="closeMenu()">Про нас</a></li>
                 <li><a href="#" onclick="closeMenu()">Доставка</a></li>
                 <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
-            <button class="hamburger" onclick="toggleMenu()">☰</button>
+
             <div class="nav-icons">
                 <span>🔍</span>
-                <span>👤</span>
                 <div class="cart-badge">🛒 0</div>
+                <button class="hamburger" onclick="toggleMenu()">☰</button>
             </div>
         </nav>
 
@@ -284,51 +282,25 @@
         <details class="faq-item">
             <summary>ІНФОРМАЦІЯ ПРО ДОСТАВКУ</summary>
             <div class="faq-content">
-                <p>Ми доставляємо ваші замовлення по всій Україні через <strong>Нову Пошту</strong>:</p>
-                <ul>
-                    <li>Відправка здійснюється в день замовлення (до 17:00).</li>
-                    <li>Терміни доставки: 1-2 робочі дні.</li>
-                    <li>Вартість — за тарифами перевізника.</li>
-                </ul>
+                <p>Ми доставляємо ваші замовлення через <strong>Нову Пошту</strong>. Відправка до 17:00.</p>
             </div>
         </details>
 
         <details class="faq-item">
             <summary>СПОСОБИ ОПЛАТИ</summary>
             <div class="faq-content">
-                <p>Ви можете обрати зручний варіант оплати:</p>
-                <ul>
-                    <li><strong>Онлайн на сайті</strong> (Apple Pay, Google Pay, Visa/Mastercard).</li>
-                    <li><strong>Післяплата</strong> при отриманні на пошті.</li>
-                    <li>Переказ на розрахунковий рахунок.</li>
-                </ul>
-            </div>
-        </details>
-
-        <details class="faq-item">
-            <summary>ІНФОРМАЦІЯ ПРО КУПІВЛЮ ТА ПОВЕРНЕННЯ</summary>
-            <div class="faq-content">
-                <p>Ми гарантуємо якість нашої продукції:</p>
-                <ul>
-                    <li>Товар підлягає обміну, якщо виявлено заводський брак.</li>
-                    <li>Повернення можливе протягом 14 днів, якщо пакування не було пошкоджене та герметичність не порушена.</li>
-                    <li>Для оформлення зверніться в наш Telegram або за номером телефону.</li>
-                </ul>
+                <p>Онлайн на сайті або післяплата при отриманні.</p>
             </div>
         </details>
     </main>
 
     <script>
         function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
         }
-
         function closeMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.remove('active');
+            document.getElementById('mobileMenu').classList.remove('active');
         }
     </script>
-
 </body>
 </html>
