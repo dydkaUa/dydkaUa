@@ -61,6 +61,7 @@
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass); backdrop-filter: blur(15px);
             padding: 12px 35px; border-radius: 100px; border: 1px solid var(--glass-border);
+            position: relative;
         }
         .logo { font-weight: 700; font-size: 22px; letter-spacing: -1px; background: linear-gradient(45deg, #fff, var(--accent-seafoam)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links { display: flex; gap: 25px; list-style: none; }
@@ -89,7 +90,7 @@
 
         .product-card {
             aspect-ratio: 1/1.3;
-            background: linear-gradient(145deg, #1e3a5f, #0a2a3a);
+            background-color: #1e3a5f;
             border-radius: 25px;
             border: 1px solid var(--glass-border);
             position: relative;
@@ -128,6 +129,7 @@
 
         .scroll-up { position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; text-decoration: none; backdrop-filter: blur(5px); z-index: 1000; }
 
+        /* МОБІЛЬНА АДАПТАЦІЯ */
         @media (max-width: 968px) {
             .adv-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
             .hero { grid-template-columns: 1fr; text-align: center; }
@@ -135,67 +137,11 @@
         }
 
         @media (max-width: 768px) {
-            header { padding: 15px 10px; }
-            .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
-            .navbar { padding: 10px 20px; flex-wrap: wrap; }
-            .logo { font-size: 18px; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; z-index: 1000; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #0a2a3a; padding: 20px; flex-direction: column; border-radius: 0 0 20px 20px; z-index: 999; border: 1px solid var(--glass-border); }
             .nav-links.active { display: flex; }
-            .nav-links a { font-size: 16px; padding: 10px 0; }
             .hamburger { display: block; }
-            .nav-icons { gap: 15px; }
-            .categories { gap: 15px; justify-content: center; }
-            header.menu-open .categories { margin-top: 200px; }
-            .cat-item { padding: 8px 12px; font-size: 11px; gap: 8px; }
-            .cat-item svg { width: 18px; height: 18px; }
-            .hero { margin: 40px auto; gap: 30px; padding: 0 15px; }
-            .hero h1 { font-size: 28px; }
-            .hero-card { padding: 25px; }
-            .popular { padding: 0 15px; margin-bottom: 60px; }
-            .popular h2 { font-size: 22px; margin-bottom: 30px; }
-            .products-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
-            .advantages { padding: 0 15px; margin-bottom: 60px; }
-            .advantages h2 { font-size: 22px; margin-bottom: 40px; }
-            .adv-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .adv-icon-circle { width: 70px; height: 70px; margin-bottom: 10px; }
-            .adv-icon-circle svg { width: 25px; height: 25px; }
-            .adv-item p { font-size: 12px; }
-            .tabs-section { margin-bottom: 80px; }
-            .tabs-switch { margin-bottom: 30px; }
-            .tab-btn { padding: 10px 20px; font-size: 12px; }
-            .scroll-up { bottom: 20px; right: 20px; width: 40px; height: 40px; }
-        }
-
-        @media (max-width: 480px) {
-            .navbar { padding: 8px 15px; }
-            .logo { font-size: 16px; }
-            .nav-links { padding: 15px; }
-            .nav-links a { font-size: 14px; }
-            .nav-icons { gap: 12px; font-size: 16px; }
-            .cart-badge { padding: 3px 8px; font-size: 12px; }
-            .categories { gap: 10px; flex-wrap: wrap; }
-            header.menu-open .categories { margin-top: 180px; }
-            .cat-item { padding: 6px 10px; font-size: 10px; gap: 6px; }
-            .cat-item svg { width: 16px; height: 16px; }
-            .hero h1 { font-size: 24px; }
-            .hero-card { padding: 20px; }
-            .hero-card p { font-size: 14px; }
-            .popular h2 { font-size: 20px; }
-            .products-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; }
-            .product-card { padding: 10px; }
-            .p-content h3 { font-size: 14px; }
-            .p-price { font-size: 16px; }
-            .advantages h2 { font-size: 20px; }
-            .adv-grid { grid-template-columns: 1fr; gap: 15px; }
-            .adv-icon-circle { width: 60px; height: 60px; }
-            .adv-icon-circle svg { width: 20px; height: 20px; }
-            .adv-item p { font-size: 11px; }
-            .tabs-switch { flex-direction: column; gap: 5px; }
-            .tab-btn { padding: 8px 15px; font-size: 11px; }
-            .age-modal { padding: 30px 15px; max-width: 90%; }
-            .age-title { font-size: 24px; margin-bottom: 25px; }
-            .age-buttons { flex-direction: column; gap: 15px; }
-            .age-btn { padding: 12px 40px; font-size: 20px; }
+            .products-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+            .adv-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -206,8 +152,8 @@
             <p class="age-text-top">Сайт містить інформацію, дозволену лише для осіб, які досягли 18 років.</p>
             <h2 class="age-title">ВАМ УЖЕ ВИПОВНИЛОСЬ 18 РОКІВ?</h2>
             <div class="age-buttons">
-                <button class="age-btn age-btn-yes" onclick="verifyAge(true)">ТАК</button>
-                <button class="age-btn age-btn-no" onclick="verifyAge(false)">НІ</button>
+                <button class="age-btn age-btn-yes" id="btn-yes">ТАК</button>
+                <button class="age-btn age-btn-no" id="btn-no">НІ</button>
             </div>
         </div>
     </div>
@@ -220,14 +166,14 @@
 
         <nav class="navbar">
             <div class="logo">ENERGY BAR</div>
-            <ul class="nav-links">
-                <li><a href="#" onclick="closeMenu()">Головна</a></li>
-                <li><a href="#" onclick="closeMenu()">Магазин</a></li>
-                <li><a href="#" onclick="closeMenu()">Про нас</a></li>
-                <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
-                <li><a href="#" onclick="closeMenu()">Контакти</a></li>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#">Головна</a></li>
+                <li><a href="#">Магазин</a></li>
+                <li><a href="#">Про нас</a></li>
+                <li><a href="delivery.html">Доставка</a></li>
+                <li><a href="#">Контакти</a></li>
             </ul>
-            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <button class="hamburger" id="hamburger">☰</button>
             <div class="nav-icons">
                 <span>🔍</span>
                 <span>👤</span>
@@ -278,7 +224,7 @@
         <section class="advantages">
             <h2>ЧОМУ МИ? НАШІ ПЕРЕВАГИ</h2>
             <div class="adv-grid">
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Відправка товару в день замовлення</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Відправка в день замовлення</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><p>Якісний сервіс</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Низька ціна</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div><p>Широкий вибір</p></div>
@@ -288,109 +234,137 @@
 
         <section class="tabs-section">
             <div class="tabs-switch">
-                <button class="tab-btn" onclick="openTab(event, 'new-arrivals')">Новинки</button>
-                <button class="tab-btn active" onclick="openTab(event, 'top-sellers')">Топові товари</button>
+                <button class="tab-btn" id="tab-new">Новинки</button>
+                <button class="tab-btn active" id="tab-top">Топові товари</button>
             </div>
             
-            <div id="new-arrivals" class="tab-content products-grid">
-                </div>
-
-            <div id="top-sellers" class="tab-content active products-grid">
-                </div>
+            <div id="new-arrivals" class="tab-content products-grid"></div>
+            <div id="top-sellers" class="tab-content active products-grid"></div>
         </section>
     </main>
 
     <a href="#" class="scroll-up">↑</a>
 
-    <script>
-        // --- ЗАВАНТАЖЕННЯ ТОВАРІВ ---
-        function displayProducts() {
-            const products = JSON.parse(localStorage.getItem('energyBarProducts')) || [];
-            const popularContainer = document.getElementById('popular-products');
-            const newArrivalsContainer = document.getElementById('new-arrivals');
-            const topSellersContainer = document.getElementById('top-sellers');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-            if (products.length === 0) {
-                popularContainer.innerHTML = "<p style='grid-column: 1/-1; opacity:0.5; text-align:center;'>Товарів поки немає. Додайте їх в адмін-панелі.</p>";
-                return;
-            }
-
-            popularContainer.innerHTML = '';
-            newArrivalsContainer.innerHTML = '';
-            topSellersContainer.innerHTML = '';
-
-            products.forEach(p => {
-                const card = `
-                    <div class="product-card" style="background-image: url('${p.img}')">
-                        <div class="p-content">
-                            <h3 style="font-size: 16px;">${p.name}</h3>
-                            <p class="p-price">${p.price} грн</p>
-                        </div>
-                    </div>
-                `;
-                // Додаємо в загальний список
-                popularContainer.innerHTML += card;
-                // Додаємо копії в таби для наочності
-                newArrivalsContainer.innerHTML += card;
-                topSellersContainer.innerHTML += card;
-            });
-        }
-
-        // --- ВЕРЕФІКАЦІЯ ВІКУ ---
-        function checkAge() {
-            if (localStorage.getItem('ageVerified') === 'true') {
-                document.getElementById('age-verification').style.display = 'none';
-                document.body.classList.remove('modal-open');
-            }
-        }
-
-        function verifyAge(adult) {
-            if (adult) {
-                localStorage.setItem('ageVerified', 'true');
-                document.getElementById('age-verification').style.display = 'none';
-                document.body.classList.remove('modal-open');
-            } else {
-                window.location.href = "https://www.google.com";
-            }
-        }
-
-        // --- ТАБИ ---
-        function openTab(evt, tabId) {
-            var i, tabContent, tabBtns;
-            tabContent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabContent.length; i++) { tabContent[i].classList.remove("active"); }
-            tabBtns = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tabBtns.length; i++) { tabBtns[i].classList.remove("active"); }
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
-        }
-
-        // --- МОБІЛЬНЕ МЕНЮ ---
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            const header = document.querySelector('header');
-            navLinks.classList.toggle('active');
-            header.classList.toggle('menu-open');
-        }
-
-        function closeMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            const header = document.querySelector('header');
-            navLinks.classList.remove('active');
-            header.classList.remove('menu-open');
-        }
-
-        // --- ЗАПУСК ---
-        window.onload = () => {
-            checkAge();
-            displayProducts();
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoMilBNzczqZh_KVJVwvpt24EOgK5NnHQ",
+            authDomain: "hapevasek.firebaseapp.com",
+            databaseURL: "https://hapevasek-default-rtdb.firebaseio.com",
+            projectId: "hapevasek",
+            storageBucket: "hapevasek.firebasestorage.app",
+            messagingSenderId: "534239781720",
+            appId: "1:534239781720:web:c1777589cf46d5cff97b2d"
         };
 
-        document.querySelector('.scroll-up').addEventListener('click', function(e) {
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- DISPLAY PRODUCTS ---
+        async function loadProducts() {
+            const productsRef = ref(db, 'products');
+            try {
+                const snapshot = await get(productsRef);
+                const data = snapshot.val();
+                const products = data ? Object.values(data) : [];
+
+                const popularGrid = document.getElementById('popular-products');
+                const newGrid = document.getElementById('new-arrivals');
+                const topGrid = document.getElementById('top-sellers');
+
+                if (products.length === 0) {
+                    popularGrid.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Товарів не знайдено.</p>";
+                    return;
+                }
+
+                popularGrid.innerHTML = '';
+                newGrid.innerHTML = '';
+                topGrid.innerHTML = '';
+
+                products.forEach(p => {
+                    const cardHTML = `
+                        <div class="product-card" style="background-image: url('${p.img}')">
+                            <div class="p-content">
+                                <h3>${p.name}</h3>
+                                <p class="p-price">${p.price} грн</p>
+                            </div>
+                        </div>
+                    `;
+                    popularGrid.innerHTML += cardHTML;
+                    newGrid.innerHTML += cardHTML;
+                    topGrid.innerHTML += cardHTML;
+                });
+            } catch (error) {
+                console.error("Помилка завантаження:", error);
+            }
+        }
+
+        // --- AGE VERIFICATION ---
+        const ageOverlay = document.getElementById('age-verification');
+        
+        window.verifyAge = (adult) => {
+            if (adult) {
+                localStorage.setItem('ageVerified', 'true');
+                ageOverlay.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            } else {
+                window.location.href = "https://google.com";
+            }
+        };
+
+        if (localStorage.getItem('ageVerified') === 'true') {
+            ageOverlay.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        document.getElementById('btn-yes').onclick = () => verifyAge(true);
+        document.getElementById('btn-no').onclick = () => verifyAge(false);
+
+        // --- TABS LOGIC ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.onclick = (e) => {
+                const targetId = btn.id === 'tab-new' ? 'new-arrivals' : 'top-sellers';
+                
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+            };
+        });
+
+        // --- MOBILE MENU ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        
+        hamburger.onclick = () => {
+            navLinks.classList.toggle('active');
+            document.querySelector('header').classList.toggle('menu-open');
+        };
+
+        // CLOSE MENU ON LINK CLICK
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.onclick = () => {
+                navLinks.classList.remove('active');
+                document.querySelector('header').classList.remove('menu-open');
+            };
+        });
+
+        // START
+        loadProducts();
+
+        // SCROLL UP
+        document.querySelector('.scroll-up').onclick = (e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        };
     </script>
 </body>
 </html>
+
 
