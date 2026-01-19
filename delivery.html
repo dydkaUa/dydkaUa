@@ -9,15 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #060212;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-purple: #9d4edd;
-            --color-sleep: #fcd34d;
-            --color-focus: #f472b6;
-            --color-relax: #60a5fa;
-            --color-libido: #f87171;
-            --color-rest: #34d399;
+            --bg-ocean: linear-gradient(135deg, #0a2a3a 0%, #1e3a5f 50%, #2d5a7a 100%);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent-seafoam: #7FFFD4;
+            --text-light: #e0f7fa;
+            --color-sleep: #ffe082;
+            --color-focus: #80deea;
+            --color-relax: #4fc3f7;
+            --color-libido: #ffab91;
+            --color-rest: #81c784;
         }
 
         * {
@@ -28,13 +29,9 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark);
-            color: #fff;
+            background: var(--bg-ocean);
+            color: var(--text-light);
             line-height: 1.6;
-            background: 
-                radial-gradient(circle at 15% 15%, #1a0b3d 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, #2d0a4e 0%, transparent 40%),
-                var(--bg-dark);
             background-attachment: fixed;
         }
 
@@ -70,7 +67,7 @@
             font-weight: 700;
             font-size: 22px;
             letter-spacing: -1px;
-            background: linear-gradient(45deg, #fff, var(--accent-purple));
+            background: linear-gradient(45deg, #fff, var(--accent-seafoam));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -89,7 +86,7 @@
             transition: 0.3s;
         }
 
-        .nav-links a:hover { color: var(--accent-purple); }
+        .nav-links a:hover { color: var(--accent-seafoam); }
 
         .nav-icons {
             display: flex;
