@@ -33,7 +33,6 @@
             color: var(--text-light);
             line-height: 1.6;
             background-attachment: fixed;
-            min-height: 100vh;
         }
 
         /* --- ШАПКА --- */
@@ -41,7 +40,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px 15px;
-            position: relative;
         }
 
         .top-bar {
@@ -63,8 +61,6 @@
             padding: 12px 35px;
             border-radius: 100px;
             border: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 1001; /* Поверх всього */
         }
 
         .logo {
@@ -74,7 +70,6 @@
             background: linear-gradient(45deg, #fff, var(--accent-seafoam));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            white-space: nowrap;
         }
 
         .nav-links {
@@ -100,33 +95,21 @@
             font-size: 18px;
         }
 
-        .hamburger { 
-            display: none; 
-            background: none; 
-            border: none; 
-            color: #fff; 
-            font-size: 24px; 
-            cursor: pointer; 
-            padding: 5px;
-        }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
 
         .cart-badge {
             background: var(--glass-border);
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 14px;
-            white-space: nowrap;
         }
 
-        /* --- КАТЕГОРІЇ --- */
         .categories {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             margin-top: 30px;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
         }
 
         .cat-item {
@@ -139,18 +122,16 @@
             font-weight: 600;
             color: rgba(255, 255, 255, 0.8);
             transition: 0.3s;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50px;
         }
 
-        .cat-item svg { width: 20px; height: 20px; }
-        .cat-item:hover { color: #fff; background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+        .cat-item svg { width: 22px; height: 22px; }
+        .cat-item:hover { color: #fff; transform: translateY(-2px); }
 
         /* --- FAQ SECTION --- */
         .faq-container {
             max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px 60px;
+            margin: 60px auto;
+            padding: 0 20px;
         }
 
         h1.faq-title {
@@ -158,7 +139,6 @@
             font-weight: 700;
             margin-bottom: 40px;
             letter-spacing: 1px;
-            text-align: left;
         }
 
         .faq-item {
@@ -182,6 +162,7 @@
             letter-spacing: 1px;
         }
 
+        /* Іконка стрілочки */
         summary::after {
             content: '';
             width: 8px;
@@ -204,53 +185,47 @@
         }
 
         .faq-content strong { color: #fff; }
+
         ul { padding-left: 20px; margin-top: 10px; }
         li { margin-bottom: 8px; }
 
-        /* --- АДАПТИВНІСТЬ --- */
-        @media (max-width: 992px) {
-            .nav-links {
-                display: none; /* Ховаємо в бургер */
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: #112d42;
-                margin-top: 10px;
-                padding: 20px;
-                border-radius: 20px;
-                border: 1px solid var(--glass-border);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                z-index: 1000;
-                gap: 15px;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger { display: block; }
-            
-            .navbar {
-                padding: 10px 25px;
-                border-radius: 30px;
-            }
-        }
-
         @media (max-width: 768px) {
-            .top-bar { display: none; }
-            header { padding: 10px 10px; }
-            h1.faq-title { font-size: 24px; margin-bottom: 20px; text-align: center; }
-            .categories { gap: 10px; margin-top: 20px; }
-            .cat-item { font-size: 10px; padding: 8px 14px; }
+            header { padding: 15px 10px; }
+            .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
+            .navbar { padding: 10px 20px; flex-wrap: wrap; }
+            .logo { font-size: 18px; }
+            .nav-links { display: none; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; }
+            .nav-links.active { display: flex; }
+            .nav-links a { font-size: 16px; padding: 10px 0; }
+            .hamburger { display: block; }
+            .nav-icons { gap: 15px; }
+            .delivery-content { padding: 20px 15px; }
+            .delivery-content h1 { font-size: 28px; }
+            .delivery-content h2 { font-size: 22px; margin-top: 30px; }
+            .delivery-content p { font-size: 14px; }
+            .faq-content { padding: 20px 15px; }
+            .faq-content h2 { font-size: 22px; }
+            .faq-item { margin-bottom: 20px; }
+            .faq-question { font-size: 16px; padding: 15px; }
+            .faq-answer { font-size: 14px; padding: 15px; }
         }
 
         @media (max-width: 480px) {
-            .logo { font-size: 18px; }
-            .cat-item { width: 100%; justify-content: center; } /* Категорії в стовпчик на малих екранах */
-            .nav-icons { gap: 10px; }
-            summary { padding: 15px 20px; font-size: 12px; }
+            .navbar { padding: 8px 15px; }
+            .logo { font-size: 16px; }
+            .nav-links { padding: 15px; }
+            .nav-links a { font-size: 14px; }
+            .nav-icons { gap: 12px; font-size: 16px; }
+            .cart-badge { padding: 3px 8px; font-size: 12px; }
+            .delivery-content { padding: 15px 10px; }
+            .delivery-content h1 { font-size: 24px; }
+            .delivery-content h2 { font-size: 20px; margin-top: 25px; }
+            .delivery-content p { font-size: 13px; }
+            .faq-content { padding: 15px 10px; }
+            .faq-content h2 { font-size: 20px; }
+            .faq-item { margin-bottom: 15px; }
+            .faq-question { font-size: 14px; padding: 12px; }
+            .faq-answer { font-size: 13px; padding: 12px; }
         }
     </style>
 </head>
@@ -264,20 +239,18 @@
 
         <nav class="navbar">
             <div class="logo">ENERGY BAR</div>
-            
-            <ul class="nav-links" id="menu">
+            <ul class="nav-links">
                 <li><a href="index.html" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#" onclick="closeMenu()">Магазин</a></li>
                 <li><a href="#" onclick="closeMenu()">Про нас</a></li>
                 <li><a href="#" onclick="closeMenu()">Доставка</a></li>
                 <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
-
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
             <div class="nav-icons">
-                <span style="cursor:pointer">🔍</span>
-                <span style="cursor:pointer">👤</span>
+                <span>🔍</span>
+                <span>👤</span>
                 <div class="cart-badge">🛒 0</div>
-                <button class="hamburger" onclick="toggleMenu()">☰</button>
             </div>
         </nav>
 
@@ -338,7 +311,8 @@
                 <p>Ми гарантуємо якість нашої продукції:</p>
                 <ul>
                     <li>Товар підлягає обміну, якщо виявлено заводський брак.</li>
-                    <li>Повернення можливе протягом 14 днів, якщо пакування не було пошкоджене.</li>
+                    <li>Повернення можливе протягом 14 днів, якщо пакування не було пошкоджене та герметичність не порушена.</li>
+                    <li>Для оформлення зверніться в наш Telegram або за номером телефону.</li>
                 </ul>
             </div>
         </details>
@@ -346,17 +320,15 @@
 
     <script>
         function toggleMenu() {
-            const navLinks = document.getElementById('menu');
+            const navLinks = document.querySelector('.nav-links');
             navLinks.classList.toggle('active');
         }
 
         function closeMenu() {
-            const navLinks = document.getElementById('menu');
+            const navLinks = document.querySelector('.nav-links');
             navLinks.classList.remove('active');
         }
     </script>
 
 </body>
 </html>
-
-
