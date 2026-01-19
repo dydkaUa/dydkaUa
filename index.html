@@ -104,10 +104,16 @@
         .hero h1 { font-size: 52px; line-height: 1.1; font-weight: 700; text-transform: uppercase; }
         .hero-card { background: var(--glass); padding: 40px; border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
 
-        /* --- СЕКЦІЯ ТОВАРІВ --- */
+        /* --- СЕКЦІЯ ТОВАРІВ (3 В РЯД) --- */
         .popular { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
         .popular h2 { font-size: 26px; margin-bottom: 40px; font-weight: 700; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 25px; }
+        
+        .products-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 В РЯД */
+            gap: 25px; 
+        }
+        
         .product-card {
             aspect-ratio: 1/1.3; border-radius: 25px; border: 1px solid var(--glass-border);
             position: relative; overflow: hidden; transition: 0.4s ease;
@@ -153,6 +159,15 @@
             .nav-links.active { max-height: 500px; padding: 20px 0; }
             .nav-links li { text-align: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .nav-links li:last-child { border: none; }
+
+            /* 3 В РЯД НА ТЕЛЕФОНАХ */
+            .products-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 10px; 
+            }
+            .product-card { padding: 10px; border-radius: 15px; }
+            .p-content h3 { font-size: 12px !important; }
+            .p-price { font-size: 14px !important; }
         }
     </style>
 </head>
@@ -340,3 +355,4 @@
     </script>
 </body>
 </html>
+
