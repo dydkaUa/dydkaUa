@@ -64,7 +64,7 @@
         .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(127, 255, 212, 0.4); }
         .close-modal {
             position: absolute; top: 15px; right: 20px; font-size: 35px;
-            color: white; cursor: pointer; z-index: 10; text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            color: white; cursor: pointer; z-index: 100; text-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         /* --- ВІКОВА ПЕРЕВІРКА --- */
@@ -190,7 +190,7 @@
 
     <div id="product-modal" class="modal-product" onclick="closeProductModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            <span class="close-modal" onclick="event.stopPropagation(); closeProductModal()">&times;</span>
             <img id="modal-img" src="" class="modal-img" onclick="event.stopPropagation(); toggleZoom()">
             <div class="modal-body">
                 <div id="modal-cat" class="modal-category">КАТЕГОРІЯ</div>
