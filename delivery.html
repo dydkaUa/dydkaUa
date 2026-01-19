@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Bar — Доставка та оплата</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #060212;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-purple: #9d4edd;
+            --color-sleep: #fcd34d;
+            --color-focus: #f472b6;
+            --color-relax: #60a5fa;
+            --color-libido: #f87171;
+            --color-rest: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            line-height: 1.6;
+            background: 
+                radial-gradient(circle at 15% 15%, #1a0b3d 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, #2d0a4e 0%, transparent 40%),
+                var(--bg-dark);
+            background-attachment: fixed;
+        }
+
+        /* --- ШАПКА --- */
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 12px 35px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #fff, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent-purple); }
+
+        .nav-icons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .cart-badge {
+            background: var(--glass-border);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .cat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            transition: 0.3s;
+        }
+
+        .cat-item svg { width: 22px; height: 22px; }
+        .cat-item:hover { color: #fff; transform: translateY(-2px); }
+
+        /* --- FAQ SECTION --- */
+        .faq-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        h1.faq-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 15px;
+            margin-bottom: 12px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 25px 30px;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Іконка стрілочки */
+        summary::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(45deg);
+            transition: 0.3s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(-135deg);
+        }
+
+        .faq-content {
+            padding: 0 30px 30px 30px;
+            color: #bbb;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .faq-content strong { color: #fff; }
+
+        ul { padding-left: 20px; margin-top: 10px; }
+        li { margin-bottom: 8px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <span>Перший центр легального задоволення</span>
+            <span>+38 (073) 625-44-64 &nbsp; IG • TK • YT • TG</span>
+        </div>
+
+        <nav class="navbar">
+            <div class="logo">ENERGY BAR</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="#">Магазин</a></li>
+                <li><a href="#">Про нас</a></li>
+                <li><a href="#">Доставка</a></li>
+                <li><a href="#">Контакти</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span>🔍</span>
+                <span>👤</span>
+                <div class="cart-badge">🛒 0</div>
+            </div>
+        </nav>
+
+        <div class="categories">
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-sleep)" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                ДЛЯ СНУ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-focus)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                КОНЦЕНТРАЦІЯ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-relax)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                РОЗСЛАБЛЕННЯ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-libido)" stroke-width="2"><path d="M12 2c0 10-8 12-8 12s8 2 8 10c0-10 8-12 8-12s-8-2-8-10z"/></svg>
+                ЛІБІДО
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-rest)" stroke-width="2"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8z"/><path d="M22 12h-4"/></svg>
+                ВІДПОЧИНОК
+            </div>
+        </div>
+    </header>
+
+    <main class="faq-container">
+        <h1 class="faq-title">FAQ</h1>
+
+        <details class="faq-item">
+            <summary>ІНФОРМАЦІЯ ПРО ДОСТАВКУ</summary>
+            <div class="faq-content">
+                <p>Ми доставляємо ваші замовлення по всій Україні через <strong>Нову Пошту</strong>:</p>
+                <ul>
+                    <li>Відправка здійснюється в день замовлення (до 17:00).</li>
+                    <li>Терміни доставки: 1-2 робочі дні.</li>
+                    <li>Вартість — за тарифами перевізника.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>СПОСОБИ ОПЛАТИ</summary>
+            <div class="faq-content">
+                <p>Ви можете обрати зручний варіант оплати:</p>
+                <ul>
+                    <li><strong>Онлайн на сайті</strong> (Apple Pay, Google Pay, Visa/Mastercard).</li>
+                    <li><strong>Післяплата</strong> при отриманні на пошті.</li>
+                    <li>Переказ на розрахунковий рахунок.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>ІНФОРМАЦІЯ ПРО КУПІВЛЮ ТА ПОВЕРНЕННЯ</summary>
+            <div class="faq-content">
+                <p>Ми гарантуємо якість нашої продукції:</p>
+                <ul>
+                    <li>Товар підлягає обміну, якщо виявлено заводський брак.</li>
+                    <li>Повернення можливе протягом 14 днів, якщо пакування не було пошкоджене та герметичність не порушена.</li>
+                    <li>Для оформлення зверніться в наш Telegram або за номером телефону.</li>
+                </ul>
+            </div>
+        </details>
+    </main>
+
+</body>
+</html>
