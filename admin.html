@@ -2,13 +2,11 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel — Energy Bar</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
 
     <style>
         :root {
@@ -78,13 +76,6 @@
         .actions { display: flex; gap: 10px; margin-top: 10px; }
         .btn-delete { background: #ef4444; color: white; }
         .btn-edit { background: #3b82f6; color: white; }
-
-        #upload-status { font-size: 12px; margin-top: 5px; display: block; color: var(--accent-seafoam); }
-
-        @media (max-width: 768px) {
-            body { padding: 20px; }
-            .admin-container { max-width: 100%; }
-        }
     </style>
 </head>
 <body>
@@ -92,8 +83,7 @@
 <script>
     (function() {
         const password = prompt("Введіть пароль адміністратора:");
-        const correctPassword = "1234"; // ЗМІНИ ЦЕЙ ПАРОЛЬ НА СВІЙ
-        if (password !== correctPassword) {
+        if (password !== "1234") { 
             alert("Доступ заборонено!");
             window.location.href = "index.html"; 
         }
@@ -117,23 +107,12 @@
                 <input type="number" id="p-price" required placeholder="500">
             </div>
             <div class="form-group">
-                <label>Категорія</label>
-                <select id="p-category">
-                    <option value="sleep">Для сну</option>
-                    <option value="focus">Концентрація</option>
-                    <option value="relax">Розслаблення</option>
-                    <option value="libido">Лібідо</option>
-                    <option value="rest">Відпочинок</option>
-                </select>
+                <label>Посилання на фото (URL)</label>
+                <input type="text" id="p-img" required placeholder="Вставте посилання (https://...)">
             </div>
             <div class="form-group">
-                <label>Фото товару (завантажити файл)</label>
-                <input type="file" id="p-file" accept="image/*">
-                <span id="upload-status"></span>
-                <input type="hidden" id="p-img"> </div>
-            <div class="form-group">
                 <label>Опис</label>
-                <textarea id="p-desc" rows="3" placeholder="Опишіть ефект продукту..."></textarea>
+                <textarea id="p-desc" rows="3" placeholder="Опишіть продукт..."></textarea>
             </div>
             <button type="submit" id="submit-btn">Зберегти товар</button>
             <button type="button" id="cancel-btn" style="display:none; background:#555; color: white;">Відмінити</button>
@@ -141,13 +120,10 @@
     </div>
 
     <h2>Товари в базі даних</h2>
-    <div class="product-list" id="admin-product-grid">
-        <p>Завантаження товарів...</p>
-    </div>
+    <div class="product-list" id="admin-product-grid"></div>
 </div>
 
 <script>
-    // --- КОНФІГУРАЦІЯ FIREBASE ---
     const firebaseConfig = {
         apiKey: "AIzaSyCoMilBNzczqZh_KVJVwvpt24EOgK5NnHQ",
         authDomain: "hapevasek.firebaseapp.com",
@@ -160,13 +136,10 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const storage = firebase.storage();
 
     const form = document.getElementById('product-form');
     const grid = document.getElementById('admin-product-grid');
-    const statusText = document.getElementById('upload-status');
 
-    // Функція рендеру списку з Firebase
     function fetchProducts() {
         db.ref('products').on('value', (snapshot) => {
             grid.innerHTML = '';
@@ -176,10 +149,9 @@
                     const p = data[id];
                     grid.innerHTML += `
                         <div class="item-card">
-                            <img src="${p.img}" alt="${p.name}">
+                            <img src="${p.img}" alt="">
                             <h3>${p.name}</h3>
                             <p>${p.price} грн</p>
-                            <small>${p.category}</small>
                             <div class="actions">
                                 <button class="btn-edit" onclick="prepareEdit('${id}')">✎</button>
                                 <button class="btn-delete" onclick="deleteProduct('${id}')">🗑</button>
@@ -187,38 +159,17 @@
                         </div>
                     `;
                 });
-            } else {
-                grid.innerHTML = '<p>Товарів поки немає.</p>';
             }
         });
     }
 
-    // Додавання/Редагування
     form.onsubmit = async (e) => {
         e.preventDefault();
         const id = document.getElementById('edit-id').value;
-        const file = document.getElementById('p-file').files[0];
-        let imageUrl = document.getElementById('p-img').value;
-
-        // Якщо обрано новий файл - завантажуємо в Storage
-        if (file) {
-            statusText.innerText = "Завантаження фото...";
-            const storageRef = storage.ref('products/' + Date.now() + "_" + file.name);
-            await storageRef.put(file);
-            imageUrl = await storageRef.getDownloadURL();
-            statusText.innerText = "Фото завантажено!";
-        }
-
-        if (!imageUrl) {
-            alert("Будь ласка, завантажте фото!");
-            return;
-        }
-
         const productData = {
             name: document.getElementById('p-name').value,
             price: document.getElementById('p-price').value,
-            category: document.getElementById('p-category').value,
-            img: imageUrl,
+            img: document.getElementById('p-img').value,
             desc: document.getElementById('p-desc').value
         };
 
@@ -227,50 +178,34 @@
         } else {
             await db.ref('products').push(productData);
         }
-
         resetForm();
     };
 
-    // Підготовка до редагування
     window.prepareEdit = (id) => {
-        db.ref('products/' + id).once('value', (snapshot) => {
-            const p = snapshot.val();
+        db.ref('products/' + id).once('value', (snap) => {
+            const p = snap.val();
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-price').value = p.price;
-            document.getElementById('p-category').value = p.category;
             document.getElementById('p-img').value = p.img;
             document.getElementById('p-desc').value = p.desc;
             document.getElementById('edit-id').value = id;
-
-            document.getElementById('form-title').innerText = "Редагувати товар";
-            document.getElementById('submit-btn').innerText = "Оновити дані";
+            document.getElementById('submit-btn').innerText = "Оновити";
             document.getElementById('cancel-btn').style.display = "inline-block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
 
-    // Видалення
     window.deleteProduct = (id) => {
-        if (confirm('Видалити цей товар назавжди?')) {
-            db.ref('products/' + id).remove();
-        }
+        if(confirm('Видалити?')) db.ref('products/' + id).remove();
     };
 
     function resetForm() {
         form.reset();
         document.getElementById('edit-id').value = "";
-        document.getElementById('p-img').value = "";
-        document.getElementById('form-title').innerText = "Додати новий товар";
         document.getElementById('submit-btn').innerText = "Зберегти товар";
         document.getElementById('cancel-btn').style.display = "none";
-        statusText.innerText = "";
     }
 
-    document.getElementById('cancel-btn').onclick = resetForm;
-
-    // Почати роботу
     fetchProducts();
 </script>
-
 </body>
 </html>
