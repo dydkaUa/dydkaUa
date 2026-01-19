@@ -44,79 +44,106 @@
             text-align: center; max-width: 600px; width: 90%; border: 1px solid #222;
         }
 
-        .age-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 35px; }
+        .age-text-top { font-size: 13px; color: #ccc; margin-bottom: 25px; }
+        .age-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 35px; letter-spacing: 1px; }
         .age-buttons { display: flex; gap: 20px; justify-content: center; }
-        .age-btn { padding: 15px 60px; font-size: 24px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; color: #fff; }
+        .age-btn { padding: 15px 60px; font-size: 24px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; color: #fff; font-family: 'Montserrat', sans-serif; }
         .age-btn-yes { background-color: #114211; }
+        .age-btn-yes:hover { background-color: #1a5e1a; }
         .age-btn-no { background-color: #610a0a; }
+        .age-btn-no:hover { background-color: #851010; }
         body.modal-open { overflow: hidden; }
 
         /* --- ШАПКА ТА НАВІГАЦІЯ --- */
         header { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-        .top-bar { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; margin-bottom: 15px; opacity: 0.6; }
+        .top-bar { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; opacity: 0.6; }
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass); backdrop-filter: blur(15px);
             padding: 12px 35px; border-radius: 100px; border: 1px solid var(--glass-border);
         }
-        .logo { font-weight: 700; font-size: 22px; background: linear-gradient(45deg, #fff, var(--accent-seafoam)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo { font-weight: 700; font-size: 22px; letter-spacing: -1px; background: linear-gradient(45deg, #fff, var(--accent-seafoam)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links { display: flex; gap: 25px; list-style: none; }
-        .nav-links a { color: #fff; text-decoration: none; font-size: 13px; transition: 0.3s; }
+        .nav-links a { color: #fff; text-decoration: none; font-size: 13px; font-weight: 400; transition: 0.3s; }
         .nav-links a:hover { color: var(--accent-seafoam); }
-        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+        .nav-icons { display: flex; gap: 18px; align-items: center; font-size: 18px; }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
         .cart-badge { background: var(--glass-border); padding: 4px 12px; border-radius: 20px; font-size: 14px; }
 
         /* --- КАТЕГОРІЇ --- */
-        .categories { display: flex; justify-content: center; gap: 25px; margin-top: 30px; flex-wrap: wrap; }
-        .cat-item { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 18px; border-radius: 15px; font-size: 12px; font-weight: 600; border: 1px solid transparent; transition: 0.3s; }
-        .cat-item:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--glass-border); transform: translateY(-3px); }
+        .categories { display: flex; justify-content: center; gap: 25px; margin-top: 30px; flex-wrap: wrap; transition: margin-top 0.3s ease; }
+        .cat-item { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 18px; border-radius: 15px; transition: all 0.4s; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.8); border: 1px solid transparent; }
         .cat-item svg { width: 22px; height: 22px; }
+        .cat-item:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--glass-border); color: #fff; transform: translateY(-3px); }
 
         /* --- HERO --- */
         .hero { max-width: 1200px; margin: 80px auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; padding: 0 20px; align-items: center; }
         .hero h1 { font-size: 52px; line-height: 1.1; font-weight: 700; text-transform: uppercase; }
-        .hero-card { background: var(--glass); padding: 40px; border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
+        .hero-card { background: var(--glass); padding: 40px; border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
+        .hero-card p { margin-bottom: 20px; color: #ccc; font-size: 16px; }
 
-        /* --- ТОВАРИ --- */
+        /* --- КАРТКИ ТОВАРІВ --- */
         .popular { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
+        .popular h2 { font-size: 26px; margin-bottom: 40px; font-weight: 700; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 25px; }
 
         .product-card {
-            aspect-ratio: 1/1.3; background-color: #1e3a5f; border-radius: 25px; border: 1px solid var(--glass-border);
-            position: relative; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; background-size: cover; background-position: center;
+            aspect-ratio: 1/1.3;
+            background: linear-gradient(145deg, #1e3a5f, #0a2a3a);
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15px;
+            background-size: cover;
+            background-position: center;
         }
         .product-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 70%); z-index: 1; }
         .product-card:hover { transform: scale(1.02); border-color: var(--accent-seafoam); box-shadow: 0 0 30px rgba(127, 255, 212, 0.3); }
         .p-content { position: relative; z-index: 2; }
-        .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 18px; }
+        .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 18px; margin-top: 5px; }
 
         /* --- ПЕРЕВАГИ --- */
         .advantages { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; text-align: center; }
+        .advantages h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 50px; }
         .adv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
-        .adv-icon-circle { width: 90px; height: 90px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; margin: 0 auto 15px; }
-        .adv-icon-circle svg { width: 35px; stroke: white; }
+        .adv-item { display: flex; flex-direction: column; align-items: center; }
+        .adv-icon-circle { width: 90px; height: 90px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; margin-bottom: 15px; transition: 0.3s; }
+        .adv-icon-circle svg { width: 35px; height: 35px; stroke: white; }
+        .adv-item p { font-size: 13px; color: #bbb; max-width: 150px; }
 
         /* --- ТАБИ --- */
         .tabs-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 100px; }
         .tabs-switch { display: flex; gap: 10px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 14px; border: 1px solid var(--glass-border); margin-bottom: 40px; }
-        .tab-btn { padding: 12px 25px; border-radius: 10px; border: none; background: transparent; color: white; font-weight: 700; cursor: pointer; }
+        .tab-btn { padding: 12px 25px; border-radius: 10px; border: none; background: transparent; color: white; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 13px; font-family: 'Montserrat'; }
         .tab-btn.active { background: white; color: black; }
-        .tab-content { display: none; width: 100%; max-width: 1200px; padding: 0 20px; }
+        .tab-content { display: none; width: 100%; max-width: 1200px; padding: 0 20px; animation: fadeIn 0.5s ease-in-out; }
         .tab-content.active { display: grid; }
 
-        .scroll-up { position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; text-decoration: none; z-index: 1000; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* МОБІЛЬНА АДАПТАЦІЯ */
+        .scroll-up { position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; text-decoration: none; backdrop-filter: blur(5px); z-index: 1000; }
+
+        @media (max-width: 968px) {
+            .adv-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+            .hero { grid-template-columns: 1fr; text-align: center; }
+            .hero h1 { font-size: 36px; }
+        }
+
         @media (max-width: 768px) {
-            .nav-links { 
-                display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-                background: #0a2a3a; flex-direction: column; padding: 20px; border-radius: 0 0 20px 20px;
-            }
+            header { padding: 15px 10px; }
+            .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
+            .navbar { padding: 10px 20px; flex-wrap: wrap; }
+            .logo { font-size: 18px; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; z-index: 1000; }
             .nav-links.active { display: flex; }
             .hamburger { display: block; }
-            .hero { grid-template-columns: 1fr; text-align: center; }
-            .adv-grid { grid-template-columns: repeat(2, 1fr); }
-            .products-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+            header.menu-open .categories { margin-top: 200px; }
+            .products-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
         }
     </style>
 </head>
@@ -124,6 +151,7 @@
 
     <div id="age-verification" class="age-overlay">
         <div class="age-modal">
+            <p class="age-text-top">Сайт містить інформацію, дозволену лише для осіб, які досягли 18 років.</p>
             <h2 class="age-title">ВАМ УЖЕ ВИПОВНИЛОСЬ 18 РОКІВ?</h2>
             <div class="age-buttons">
                 <button class="age-btn age-btn-yes" onclick="verifyAge(true)">ТАК</button>
@@ -135,26 +163,74 @@
     <header>
         <div class="top-bar">
             <span>Перший центр легального задоволення</span>
-            <span>+38 (073) 625-44-64</span>
+            <span>+38 (073) 625-44-64 &nbsp; IG • TK • YT • TG</span>
         </div>
+
         <nav class="navbar">
             <div class="logo">ENERGY BAR</div>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#">Головна</a></li>
-                <li><a href="#">Магазин</a></li>
-                <li><a href="delivery.html">Доставка</a></li>
+            <ul class="nav-links">
+                <li><a href="#" onclick="closeMenu()">Головна</a></li>
+                <li><a href="#" onclick="closeMenu()">Магазин</a></li>
+                <li><a href="#" onclick="closeMenu()">Про нас</a></li>
+                <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
+                <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
             <button class="hamburger" onclick="toggleMenu()">☰</button>
             <div class="nav-icons">
+                <span>🔍</span>
+                <span>👤</span>
                 <div class="cart-badge">🛒 0</div>
             </div>
         </nav>
+
+        <div class="categories">
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-sleep)" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                ДЛЯ СНУ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-focus)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                КОНЦЕНТРАЦІЯ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-relax)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                РОЗСЛАБЛЕННЯ
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-libido)" stroke-width="2"><path d="M12 2c0 10-8 12-8 12s8 2 8 10c0-10 8-12 8-12s-8-2-8-10z"/></svg>
+                ЛІБІДО
+            </div>
+            <div class="cat-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-rest)" stroke-width="2"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8z"/><path d="M22 12h-4"/></svg>
+                ВІДПОЧИНОК
+            </div>
+        </div>
     </header>
 
     <main>
+        <section class="hero">
+            <h1>Більше ніж продукти — <br> шлях до кращого життя</h1>
+            <div class="hero-card">
+                <p>Ласкаво просимо до Energy Bar! Тут ви знайдете натуральні продукти для покращення сну, енергії, концентрації та настрою.</p>
+                <p>Наш асортимент включає напої, чаї, мікродозинг грибів, біодобавки та продукти з CBD.</p>
+                <p style="color: #fff; font-weight: 600;">Energy Bar — ваш ідеальний вибір для активного життя.</p>
+            </div>
+        </section>
+
         <section class="popular">
-            <h2 style="margin-bottom: 40px;">ОБИРАЮТЬ НАЙЧАСТІШЕ:</h2>
-            <div class="products-grid" id="main-products"></div>
+            <h2>ОБИРАЮТЬ НАЙЧАСТІШЕ:</h2>
+            <div class="products-grid" id="popular-products"></div>
+        </section>
+
+        <section class="advantages">
+            <h2>ЧОМУ МИ? НАШІ ПЕРЕВАГИ</h2>
+            <div class="adv-grid">
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Відправка товару в день замовлення</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><p>Якісний сервіс</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0118 0z"/></svg></div><p>Низька ціна</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div><p>Широкий вибір</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg></div><p>Власне виробництво</p></div>
+            </div>
         </section>
 
         <section class="tabs-section">
@@ -179,6 +255,7 @@
             databaseURL: "https://hapevasek-default-rtdb.firebaseio.com",
             projectId: "hapevasek",
             storageBucket: "hapevasek.firebasestorage.app",
+            messagingSenderId: "534239781720",
             appId: "1:534239781720:web:c1777589cf46d5cff97b2d"
         };
 
@@ -186,51 +263,84 @@
         const db = getDatabase(app);
 
         // --- ГЛОБАЛЬНІ ФУНКЦІЇ ---
-        window.toggleMenu = () => document.getElementById('nav-links').classList.toggle('active');
-        
         window.verifyAge = (adult) => {
             if (adult) {
                 localStorage.setItem('ageVerified', 'true');
                 document.getElementById('age-verification').style.display = 'none';
                 document.body.classList.remove('modal-open');
-            } else window.location.href = "https://google.com";
+            } else {
+                window.location.href = "https://www.google.com";
+            }
+        };
+
+        window.toggleMenu = () => {
+            const navLinks = document.querySelector('.nav-links');
+            const header = document.querySelector('header');
+            navLinks.classList.toggle('active');
+            header.classList.toggle('menu-open');
+        };
+
+        window.closeMenu = () => {
+            const navLinks = document.querySelector('.nav-links');
+            const header = document.querySelector('header');
+            navLinks.classList.remove('active');
+            header.classList.remove('menu-open');
         };
 
         window.openTab = (evt, tabId) => {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            evt.currentTarget.classList.add('active');
+            const tabContent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+            }
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
         };
 
         // --- ЗАВАНТАЖЕННЯ ТОВАРІВ ---
-        onValue(ref(db, 'products'), (snapshot) => {
+        const productsRef = ref(db, 'products');
+        onValue(productsRef, (snapshot) => {
             const data = snapshot.val();
-            const grid = document.getElementById('main-products');
-            const newGrid = document.getElementById('new-arrivals');
-            const topGrid = document.getElementById('top-sellers');
-            
-            grid.innerHTML = '';
-            if (data) {
-                Object.values(data).forEach(p => {
-                    const card = `
-                        <div class="product-card" style="background-image: url('${p.img}')">
-                            <div class="p-content">
-                                <h3>${p.name}</h3>
-                                <p class="p-price">${p.price} грн</p>
-                            </div>
-                        </div>`;
-                    grid.innerHTML += card;
-                    newGrid.innerHTML += card;
-                    topGrid.innerHTML += card;
-                });
+            const popularContainer = document.getElementById('popular-products');
+            const newArrivalsContainer = document.getElementById('new-arrivals');
+            const topSellersContainer = document.getElementById('top-sellers');
+
+            if (!data) {
+                popularContainer.innerHTML = "<p style='grid-column: 1/-1; opacity:0.5; text-align:center;'>Товарів поки немає.</p>";
+                return;
             }
+
+            const products = Object.values(data);
+            
+            const renderCard = (p) => `
+                <div class="product-card" style="background-image: url('${p.img}')">
+                    <div class="p-content">
+                        <h3 style="font-size: 16px;">${p.name}</h3>
+                        <p class="p-price">${p.price} грн</p>
+                    </div>
+                </div>
+            `;
+
+            const html = products.map(renderCard).join('');
+            popularContainer.innerHTML = html;
+            newArrivalsContainer.innerHTML = html;
+            topSellersContainer.innerHTML = html;
         });
 
+        // ПЕРЕВІРКА ВІКУ ПРИ ЗАВАНТАЖЕННІ
         if (localStorage.getItem('ageVerified') === 'true') {
             document.getElementById('age-verification').style.display = 'none';
             document.body.classList.remove('modal-open');
         }
+
+        // СКРОЛЛ
+        document.querySelector('.scroll-up').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     </script>
 </body>
 </html>
