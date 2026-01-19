@@ -64,7 +64,9 @@
         .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(127, 255, 212, 0.4); }
         .close-modal {
             position: absolute; top: 15px; right: 20px; font-size: 35px;
-            color: white; cursor: pointer; z-index: 100; text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            color: white; cursor: pointer; z-index: 1000; text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6); border-radius: 50%; padding: 5px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         /* --- ВІКОВА ПЕРЕВІРКА --- */
@@ -190,7 +192,7 @@
 
     <div id="product-modal" class="modal-product" onclick="closeProductModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="event.stopPropagation(); closeProductModal()">&times;</span>
+            <button type="button" class="close-modal" onclick="closeProductModal()">&times;</button>
             <img id="modal-img" src="" class="modal-img" onclick="event.stopPropagation(); toggleZoom()">
             <div class="modal-body">
                 <div id="modal-cat" class="modal-category">КАТЕГОРІЯ</div>
@@ -310,6 +312,11 @@
             document.getElementById('modal-img').classList.toggle('zoomed');
         };
 
+        window.closeProductModal = () => {
+            document.getElementById('product-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
         window.verifyAge = (adult) => {
             if (adult) {
                 localStorage.setItem('ageVerified', 'true');
@@ -368,5 +375,4 @@
     </script>
 </body>
 </html>
-
 
