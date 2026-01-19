@@ -98,7 +98,7 @@
         .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
 
         /* Backdrop for mobile menu */
-        .menu-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .menu-backdrop { display: none; }
 
         .cart-badge {
             background: var(--glass-border);
@@ -197,8 +197,8 @@
             .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
             .navbar { padding: 10px 20px; flex-wrap: wrap; }
             .logo { font-size: 18px; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; z-index: 1000; }
-            .nav-links.active { display: flex; }
+            .nav-links { display: none; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+            .nav-links.active { display: flex; max-height: 500px; }
             .nav-links a { font-size: 16px; padding: 10px 0; }
             .hamburger { display: block; }
             .nav-icons { gap: 15px; }
@@ -281,9 +281,6 @@
         </div>
     </header>
 
-    <!-- Backdrop for mobile menu -->
-    <div class="menu-backdrop" onclick="closeMenu()"></div>
-
     <main class="faq-container">
         <h1 class="faq-title">FAQ</h1>
 
@@ -327,16 +324,12 @@
     <script>
         function toggleMenu() {
             const navLinks = document.querySelector('.nav-links');
-            const backdrop = document.querySelector('.menu-backdrop');
             navLinks.classList.toggle('active');
-            backdrop.style.display = navLinks.classList.contains('active') ? 'block' : 'none';
         }
 
         function closeMenu() {
             const navLinks = document.querySelector('.nav-links');
-            const backdrop = document.querySelector('.menu-backdrop');
             navLinks.classList.remove('active');
-            backdrop.style.display = 'none';
         }
     </script>
 
