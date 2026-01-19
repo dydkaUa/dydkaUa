@@ -74,8 +74,8 @@
             margin-bottom: 10px;
         }
         .actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-delete { background: #ef4444; color: white; }
-        .btn-edit { background: #3b82f6; color: white; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .btn-edit { background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -112,7 +112,18 @@
             </div>
             <div class="form-group">
                 <label>Опис</label>
-                <textarea id="p-desc" rows="3" placeholder="Опишіть продукт..."></textarea>
+                <textarea id="p-desc" rows="3" placeholder="Опишіть товар..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Категорія</label>
+                <select id="p-category" required>
+                    <option value="">Оберіть категорію</option>
+                    <option value="ДЛЯ СНУ">ДЛЯ СНУ</option>
+                    <option value="КОНЦЕНТРАЦІЯ">КОНЦЕНТРАЦІЯ</option>
+                    <option value="РОЗСЛАБЛЕННЯ">РОЗСЛАБЛЕННЯ</option>
+                    <option value="ЛІБІДО">ЛІБІДО</option>
+                    <option value="ВІДПОЧИНОК">ВІДПОЧИНОК</option>
+                </select>
             </div>
             <button type="submit" id="submit-btn">Зберегти товар</button>
             <button type="button" id="cancel-btn" style="display:none; background:#555; color: white;">Відмінити</button>
@@ -120,7 +131,7 @@
     </div>
 
     <h2>Товари в базі даних</h2>
-    <div class="product-list" id="admin-product-grid"></div>
+    <div class="product-list" id="admin-product-grid">Завантаження...</div>
 </div>
 
 <script>
@@ -134,12 +145,16 @@
         appId: "1:534239781720:web:c1777589cf46d5cff97b2d"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Ініціалізація Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
     const form = document.getElementById('product-form');
     const grid = document.getElementById('admin-product-grid');
 
+    // Функція отримання товарів
     function fetchProducts() {
         db.ref('products').on('value', (snapshot) => {
             grid.innerHTML = '';
@@ -147,64 +162,100 @@
             if (data) {
                 Object.keys(data).forEach((id) => {
                     const p = data[id];
-                    grid.innerHTML += `
-                        <div class="item-card">
-                            <img src="${p.img}" alt="">
-                            <h3>${p.name}</h3>
-                            <p>${p.price} грн</p>
-                            <div class="actions">
-                                <button class="btn-edit" onclick="prepareEdit('${id}')">✎</button>
-                                <button class="btn-delete" onclick="deleteProduct('${id}')">🗑</button>
-                            </div>
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'" alt="">
+                        <h3>${p.name}</h3>
+                        <p>${p.price} грн</p>
+                        <small>${p.category || 'Без категорії'}</small>
+                        <div class="actions">
+                            <button class="btn-edit" onclick="prepareEdit('${id}')">✎</button>
+                            <button class="btn-delete" onclick="deleteProduct('${id}')">🗑</button>
                         </div>
                     `;
+                    grid.appendChild(card);
                 });
+            } else {
+                grid.innerHTML = '<p>Товарів немає</p>';
             }
+        }, (error) => {
+            console.error("Помилка читання:", error);
+            grid.innerHTML = '<p style="color:red">Помилка доступу до бази даних!</p>';
         });
     }
 
-    form.onsubmit = async (e) => {
+    // Обробка форми
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const id = document.getElementById('edit-id').value;
         const productData = {
             name: document.getElementById('p-name').value,
             price: document.getElementById('p-price').value,
             img: document.getElementById('p-img').value,
-            desc: document.getElementById('p-desc').value
+            description: document.getElementById('p-desc').value,
+            category: document.getElementById('p-category').value,
+            timestamp: Date.now()
         };
 
-        if (id) {
-            await db.ref('products/' + id).update(productData);
-        } else {
-            await db.ref('products').push(productData);
+        try {
+            if (id) {
+                // Оновлення
+                await db.ref('products/' + id).update(productData);
+                alert('Товар оновлено!');
+            } else {
+                // Додавання
+                await db.ref('products').push(productData);
+                alert('Товар додано успішно!');
+            }
+            resetForm();
+        } catch (error) {
+            console.error("Помилка запису:", error);
+            alert("Помилка: " + error.message);
         }
-        resetForm();
-    };
+    });
 
+    // Редагування
     window.prepareEdit = (id) => {
         db.ref('products/' + id).once('value', (snap) => {
             const p = snap.val();
-            document.getElementById('p-name').value = p.name;
-            document.getElementById('p-price').value = p.price;
-            document.getElementById('p-img').value = p.img;
-            document.getElementById('p-desc').value = p.desc;
+            if (!p) return;
+
+            document.getElementById('p-name').value = p.name || '';
+            document.getElementById('p-price').value = p.price || '';
+            document.getElementById('p-img').value = p.img || '';
+            document.getElementById('p-desc').value = p.description || p.desc || '';
+            document.getElementById('p-category').value = p.category || '';
             document.getElementById('edit-id').value = id;
+            
+            document.getElementById('form-title').innerText = "Редагувати товар";
             document.getElementById('submit-btn').innerText = "Оновити";
             document.getElementById('cancel-btn').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
 
+    // Видалення
     window.deleteProduct = (id) => {
-        if(confirm('Видалити?')) db.ref('products/' + id).remove();
+        if(confirm('Видалити цей товар?')) {
+            db.ref('products/' + id).remove()
+                .then(() => alert('Видалено'))
+                .catch(err => alert('Помилка: ' + err.message));
+        }
     };
 
     function resetForm() {
         form.reset();
         document.getElementById('edit-id').value = "";
+        document.getElementById('form-title').innerText = "Додати новий товар";
         document.getElementById('submit-btn').innerText = "Зберегти товар";
         document.getElementById('cancel-btn').style.display = "none";
     }
 
+    document.getElementById('cancel-btn').onclick = resetForm;
+
+    // Запуск
     fetchProducts();
 </script>
 </body>
