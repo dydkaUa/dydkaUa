@@ -32,26 +32,52 @@
             background-attachment: fixed;
         }
 
+        /* --- МОДАЛЬНЕ ВІКНО ТОВАРУ --- */
+        .modal-product {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px); display: none; justify-content: center;
+            align-items: center; z-index: 20000; padding: 20px;
+        }
+        .modal-content {
+            background: #0a2a3a; width: 100%; max-width: 500px;
+            border-radius: 30px; border: 1px solid var(--glass-border);
+            position: relative; overflow: hidden; animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .modal-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .modal-body { padding: 30px; }
+        .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+        .modal-price { font-size: 20px; color: var(--accent-seafoam); font-weight: 700; margin-bottom: 15px; }
+        .modal-desc { font-size: 14px; color: #ccc; margin-bottom: 25px; line-height: 1.5; }
+        
+        .buy-btn {
+            width: 100%; padding: 15px; background: var(--accent-seafoam);
+            color: #0a2a3a; border: none; border-radius: 15px;
+            font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s;
+        }
+        .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(127, 255, 212, 0.4); }
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; font-size: 30px;
+            color: white; cursor: pointer; z-index: 10;
+        }
+
         /* --- СТИЛІ ПЕРЕВІРКИ ВІКУ --- */
         .age-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 42, 58, 0.9); backdrop-filter: blur(15px);
             display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
-
         .age-modal {
             background: #000; padding: 40px 20px; border-radius: 25px;
             text-align: center; max-width: 600px; width: 90%; border: 1px solid #222;
         }
-
         .age-text-top { font-size: 13px; color: #ccc; margin-bottom: 25px; }
         .age-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 35px; letter-spacing: 1px; }
         .age-buttons { display: flex; gap: 20px; justify-content: center; }
         .age-btn { padding: 15px 60px; font-size: 24px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; color: #fff; font-family: 'Montserrat', sans-serif; }
         .age-btn-yes { background-color: #114211; }
-        .age-btn-yes:hover { background-color: #1a5e1a; }
         .age-btn-no { background-color: #610a0a; }
-        .age-btn-no:hover { background-color: #851010; }
         body.modal-open { overflow: hidden; }
 
         /* --- ШАПКА ТА НАВІГАЦІЯ --- */
@@ -101,6 +127,7 @@
             padding: 15px;
             background-size: cover;
             background-position: center;
+            cursor: pointer;
         }
         .product-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 70%); z-index: 1; }
         .product-card:hover { transform: scale(1.02); border-color: var(--accent-seafoam); box-shadow: 0 0 30px rgba(127, 255, 212, 0.3); }
@@ -149,6 +176,19 @@
 </head>
 <body class="modal-open">
 
+    <div id="product-modal" class="modal-product" onclick="closeProductModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            <img id="modal-img" src="" class="modal-img">
+            <div class="modal-body">
+                <h2 id="modal-title" class="modal-title">Назва</h2>
+                <div id="modal-price" class="modal-price">0 грн</div>
+                <p id="modal-desc" class="modal-desc">Опис товару завантажується...</p>
+                <button class="buy-btn" onclick="addToCart()">КУПИТИ</button>
+            </div>
+        </div>
+    </div>
+
     <div id="age-verification" class="age-overlay">
         <div class="age-modal">
             <p class="age-text-top">Сайт містить інформацію, дозволену лише для осіб, які досягли 18 років.</p>
@@ -179,7 +219,7 @@
             <div class="nav-icons">
                 <span>🔍</span>
                 <span>👤</span>
-                <div class="cart-badge">🛒 0</div>
+                <div class="cart-badge">🛒 <span id="cart-count">0</span></div>
             </div>
         </nav>
 
@@ -265,6 +305,30 @@
         const db = getDatabase(app);
 
         // --- ГЛОБАЛЬНІ ФУНКЦІЇ ДЛЯ HTML ---
+        
+        // Модальне вікно
+        window.openProduct = (name, price, img, desc) => {
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-price').innerText = price + ' грн';
+            document.getElementById('modal-img').src = img;
+            document.getElementById('modal-desc').innerText = desc || 'Опис відсутній';
+            document.getElementById('product-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+        };
+
+        window.closeProductModal = () => {
+            document.getElementById('product-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        window.addToCart = () => {
+            alert('Товар додано до кошика!');
+            const count = document.getElementById('cart-count');
+            count.innerText = parseInt(count.innerText) + 1;
+            window.closeProductModal();
+        };
+
+        // Вік
         window.verifyAge = (adult) => {
             if (adult) {
                 localStorage.setItem('ageVerified', 'true');
@@ -275,6 +339,7 @@
             }
         };
 
+        // Меню
         window.toggleMenu = () => {
             const navLinks = document.querySelector('.nav-links');
             const header = document.querySelector('header');
@@ -289,6 +354,7 @@
             header.classList.remove('menu-open');
         };
 
+        // Таби
         window.openTab = (evt, tabId) => {
             const tabContent = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabContent.length; i++) {
@@ -317,14 +383,21 @@
 
             const products = Object.values(data);
             
-            const renderCard = (p) => `
-                <div class="product-card" style="background-image: url('${p.img}')">
+            const renderCard = (p) => {
+                // Очищаємо опис для безпечної передачі у функцію JS
+                const cleanDesc = (p.description || p.desc || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                
+                return `
+                <div class="product-card" 
+                     style="background-image: url('${p.img}')" 
+                     onclick="openProduct('${p.name}', '${p.price}', '${p.img}', '${cleanDesc}')">
                     <div class="p-content">
                         <h3 style="font-size: 16px;">${p.name}</h3>
                         <p class="p-price">${p.price} грн</p>
                     </div>
                 </div>
-            `;
+                `;
+            };
 
             const html = products.map(renderCard).join('');
             popularContainer.innerHTML = html;
@@ -346,6 +419,5 @@
     </script>
 </body>
 </html>
-
 
 
