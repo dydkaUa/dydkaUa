@@ -74,7 +74,7 @@
         .cart-badge { background: var(--glass-border); padding: 4px 12px; border-radius: 20px; font-size: 14px; }
 
         /* --- КАТЕГОРІЇ --- */
-        .categories { display: flex; justify-content: center; gap: 25px; margin-top: 30px; flex-wrap: wrap; }
+        .categories { display: flex; justify-content: center; gap: 25px; margin-top: 30px; flex-wrap: wrap; transition: margin-top 0.3s ease; }
         .cat-item { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 18px; border-radius: 15px; transition: all 0.4s; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.8); border: 1px solid transparent; }
         .cat-item svg { width: 22px; height: 22px; }
         .cat-item:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--glass-border); color: #fff; transform: translateY(-3px); }
@@ -148,6 +148,7 @@
             .hamburger { display: block; }
             .nav-icons { gap: 15px; }
             .categories { gap: 15px; justify-content: center; }
+            header.menu-open .categories { margin-top: 200px; }
             .cat-item { padding: 8px 12px; font-size: 11px; gap: 8px; }
             .cat-item svg { width: 18px; height: 18px; }
             .hero { margin: 40px auto; gap: 30px; padding: 0 15px; }
@@ -176,6 +177,7 @@
             .nav-icons { gap: 12px; font-size: 16px; }
             .cart-badge { padding: 3px 8px; font-size: 12px; }
             .categories { gap: 10px; flex-wrap: wrap; }
+            header.menu-open .categories { margin-top: 180px; }
             .cat-item { padding: 6px 10px; font-size: 10px; gap: 6px; }
             .cat-item svg { width: 16px; height: 16px; }
             .hero h1 { font-size: 24px; }
@@ -368,7 +370,9 @@
         // --- МОБІЛЬНЕ МЕНЮ ---
         function toggleMenu() {
             const navLinks = document.querySelector('.nav-links');
+            const header = document.querySelector('header');
             navLinks.classList.toggle('active');
+            header.classList.toggle('menu-open');
         }
 
         // --- ЗАПУСК ---
@@ -384,3 +388,4 @@
     </script>
 </body>
 </html>
+
