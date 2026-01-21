@@ -96,7 +96,8 @@
             padding: 12px 35px; border-radius: 100px; border: 1px solid var(--glass-border);
             position: relative; z-index: 1001;
         }
-        .logo { font-weight: 700; font-size: 22px; letter-spacing: -1px; background: linear-gradient(45deg, #fff, var(--accent-seafoam)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; letter-spacing: -1px; background: linear-gradient(45deg, #fff, var(--accent-seafoam)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .logo img { height: 50px; width: 50px; object-fit: cover; border-radius: 50%; }
         
         .nav-links { display: flex; gap: 25px; list-style: none; }
         .nav-links a { color: #fff; text-decoration: none; font-size: 13px; transition: 0.3s; }
@@ -238,7 +239,7 @@
             <span>+38 (073) 625-44-64 &nbsp; IG • TK • YT • TG</span>
         </div>
         <nav class="navbar">
-            <a href="#" class="logo">PhytoLab</a>
+            <a href="#" class="logo"><img src="logo.png" alt="Energy Bar Logo"> PhytoLab</a>
             <ul class="nav-links" id="main-menu">
                 <li><a href="#" id="home-link" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#categories" onclick="goToCategories()">Магазин</a></li>
@@ -257,7 +258,7 @@
             <!-- Заголовок hero видалено -->
             <div class="hero-card">
                 <p>Ласкаво просимо до PhytoLab! Тут ви знайдете натуральні продукти для покращення сну, енергії, концентрації та настрою.</p>
-                <p style="color: #fff; font-weight: 600; margin-top:15px;">PhytoLab — ваш ідеальний вибір для активного життя.</p>
+                <p style="color: #fff; font-weight: 600; margin-top:15px;">Energy Bar — ваш ідеальний вибір для активного життя.</p>
             </div>
         </section>
 
@@ -499,5 +500,3 @@
     </script>
 </body>
 </html>
-
-
