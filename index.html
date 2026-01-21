@@ -112,31 +112,31 @@
         
         .products-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 25px; 
+            grid-template-columns: repeat(2, 1fr); /* 2 in a row for larger cards */
+            gap: 28px; 
         }
         
         .product-card {
-            aspect-ratio: 1/1.45; /* ЗБІЛЬШЕНО ВИСОТУ */
+            aspect-ratio: 1/1.35; /* трохи вищі */
             border-radius: 25px; border: 1px solid var(--glass-border);
-            position: relative; overflow: hidden; transition: 0.4s ease;
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;
+            position: relative; overflow: hidden; transition: 0.35s ease;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 18px;
             background-size: cover; background-position: center; cursor: pointer;
         }
         .product-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 65%); z-index: 1; }
         
         .p-content { position: relative; z-index: 2; width: 100%; }
         .p-content h3 { 
-            font-size: 16px; 
+            font-size: 18px; 
             line-height: 1.2; 
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             display: -webkit-box;
             -webkit-line-clamp: 2; /* ДОЗВОЛЯЄ 2 РЯДКИ ТЕКСТУ */
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
         .p-card-cat { font-size: 10px; font-weight: 700; color: var(--accent-seafoam); text-transform: uppercase; margin-bottom: 3px; }
-        .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 18px; }
+        .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 20px; }
 
         /* --- КАТЕГОРІЇ --- */
         .categories-section { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; text-align: center; }
@@ -181,8 +181,8 @@
             .nav-links li:last-child { border: none; }
 
             .products-grid { 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 10px; 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px; 
             }
             .product-card { 
                 padding: 10px; 
@@ -491,5 +491,4 @@
     </script>
 </body>
 </html>
-
 
