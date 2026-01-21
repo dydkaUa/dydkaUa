@@ -233,13 +233,12 @@
             <a href="#" class="logo">ENERGY BAR</a>
             <ul class="nav-links" id="main-menu">
                 <li><a href="#" id="home-link" onclick="closeMenu()">Головна</a></li>
-                <li><a href="#" onclick="closeMenu()">Магазин</a></li>
+                <li><a href="#categories" onclick="goToCategories()">Магазин</a></li>
                 <li><a href="#" onclick="closeMenu()">Про нас</a></li>
                 <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
                 <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="cart-badge">🛒 <span id="cart-count">0</span></div>
                 <button class="hamburger" onclick="toggleMenu()">☰</button>
             </div>
         </nav>
@@ -254,7 +253,7 @@
             </div>
         </section>
 
-        <section class="categories-section">
+        <section id="categories" class="categories-section">
             <h2>КАТЕГОРІЇ ТОВАРІВ</h2>
             <div class="categories-grid">
             </div>
@@ -302,6 +301,13 @@
 
         let cachedProducts = {};
         let categories = [];
+
+        window.goToCategories = () => {
+            // Close mobile menu then scroll to categories
+            closeMenu();
+            const el = document.getElementById('categories');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
 
         window.toggleMenu = () => document.getElementById('main-menu').classList.toggle('active');
         window.closeMenu = () => document.getElementById('main-menu').classList.remove('active');
