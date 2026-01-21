@@ -96,7 +96,7 @@
         
         .nav-links { display: flex; gap: 25px; list-style: none; }
         .nav-links a { color: #fff; text-decoration: none; font-size: 13px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent-seafoam); }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-seafoam); }
 
         .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
         .cart-badge { background: var(--glass-border); padding: 4px 12px; border-radius: 20px; font-size: 14px; }
@@ -138,20 +138,26 @@
         .p-card-cat { font-size: 10px; font-weight: 700; color: var(--accent-seafoam); text-transform: uppercase; margin-bottom: 3px; }
         .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 18px; }
 
-        /* --- ПЕРЕВАГИ --- */
-        .advantages { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; text-align: center; }
-        .advantages h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 50px; font-weight: 700; }
+        /* --- КАТЕГОРІЇ --- */
+        .categories-section { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; text-align: center; }
+        .categories-section h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 40px; font-weight: 700; }
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .category-btn { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; cursor: pointer; transition: 0.3s; color: var(--text-light); font-weight: 600; }
+        .category-btn:hover, .category-btn.active { background: var(--accent-seafoam); color: #0a2a3a; }
+        .category-products { margin-top: 40px; }
+        .advantages h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 50px; font-weight: 700; text-align: center; }
         .adv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
         .adv-item { display: flex; flex-direction: column; align-items: center; }
         .adv-icon-circle { width: 90px; height: 90px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
         .adv-icon-circle svg { width: 35px; height: 35px; stroke: white; }
-        .adv-item p { font-size: 13px; color: #bbb; max-width: 150px; line-height: 1.4; }
+        .adv-item p { font-size: 13px; color: #bbb; line-height: 1.4; text-align: center; }
 
         /* --- ТАБИ --- */
         .tabs-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 100px; }
         .tabs-switch { display: flex; gap: 10px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 14px; border: 1px solid var(--glass-border); margin-bottom: 40px; }
         .tab-btn { padding: 12px 25px; border-radius: 10px; border: none; background: transparent; color: white; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 13px; font-family: 'Montserrat'; }
-        .tab-btn.active { background: white; color: black; }
+        .tab-btn.disabled { opacity: 0.5; pointer-events: none; }
+        .tab-btn.active { background: white; color: black; font-weight: bold; }
         .tab-content { display: none; width: 100%; max-width: 1200px; padding: 0 20px; }
         .tab-content.active { display: grid; }
 
@@ -185,6 +191,9 @@
             }
             .p-content h3 { font-size: 11px; }
             .p-price { font-size: 13px; }
+
+            .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .category-btn { padding: 15px; font-size: 14px; }
         }
     </style>
 </head>
@@ -223,7 +232,7 @@
         <nav class="navbar">
             <a href="#" class="logo">ENERGY BAR</a>
             <ul class="nav-links" id="main-menu">
-                <li><a href="#" onclick="closeMenu()">Головна</a></li>
+                <li><a href="#" id="home-link" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#" onclick="closeMenu()">Магазин</a></li>
                 <li><a href="#" onclick="closeMenu()">Про нас</a></li>
                 <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
@@ -245,15 +254,17 @@
             </div>
         </section>
 
-        <section class="popular">
-            <h2>ОБИРАЮТЬ НАЙЧАСТІШЕ:</h2>
-            <div class="products-grid" id="popular-products"></div>
+        <section class="categories-section">
+            <h2>КАТЕГОРІЇ ТОВАРІВ</h2>
+            <div class="categories-grid">
+            </div>
+            <div class="category-products" id="category-products"></div>
         </section>
 
         <section class="advantages">
             <h2>ЧОМУ МИ? НАШІ ПЕРЕВАГИ</h2>
             <div class="adv-grid">
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Відправка товару в день замовлення</p></div>
+                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Швидка Відправка</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><p>Якісний сервіс</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0118 0z"/></svg></div><p>Низька ціна</p></div>
                 <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div><p>Широкий вибір</p></div>
@@ -290,6 +301,7 @@
         const db = getDatabase(app);
 
         let cachedProducts = {};
+        let categories = [];
 
         window.toggleMenu = () => document.getElementById('main-menu').classList.toggle('active');
         window.closeMenu = () => document.getElementById('main-menu').classList.remove('active');
@@ -328,51 +340,136 @@
         };
 
         window.openTab = (evt, tabId) => {
+            const tabContent = document.getElementById(tabId);
+            if (!tabContent || tabContent.innerHTML.trim() === '') return; // Не переключать если пустой
             document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            document.getElementById(tabId).classList.add("active");
+            tabContent.classList.add("active");
             evt.currentTarget.classList.add("active");
         };
 
-        window.addToCart = () => {
-            alert('Товар додано до кошика!');
-            const count = document.getElementById('cart-count');
-            count.innerText = parseInt(count.innerText) + 1;
-            closeProductModal();
+        window.filterByCategory = (category) => {
+            // Remove active from all category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            // Add active to clicked
+            event.target.classList.add('active');
+            // Filter products
+            const container = document.getElementById('category-products');
+            let html = '';
+            Object.keys(cachedProducts).forEach(id => {
+                const p = cachedProducts[id];
+                if (p.category === category) {
+                    html += `
+                    <div class="product-card" style="background-image: url('${p.img}')" onclick="openProduct('${id}')">
+                        <div class="p-content">
+                            <div class="p-card-cat">${p.category || 'Загальне'}</div>
+                            <h3>${p.name}</h3>
+                            <p class="p-price">${p.price} грн</p>
+                        </div>
+                    </div>`;
+                }
+            });
+            container.innerHTML = html ? `<div class="products-grid">${html}</div>` : '<p>Товарів у цій категорії немає</p>';
         };
+
+        function renderCategories() {
+            const grid = document.querySelector('.categories-grid');
+            grid.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('div');
+                btn.className = 'category-btn';
+                btn.textContent = cat;
+                btn.onclick = () => filterByCategory(cat);
+                grid.appendChild(btn);
+            });
+        }
+
+        function updateTabs() {
+            const news = document.getElementById('new-arrivals');
+            const tops = document.getElementById('top-sellers');
+            const tabsSection = document.querySelector('.tabs-section');
+            const hasNews = news.innerHTML.trim() !== '';
+            const hasTops = tops.innerHTML.trim() !== '';
+            if (!hasNews && !hasTops) {
+                tabsSection.style.display = 'none';
+                return;
+            }
+            tabsSection.style.display = 'flex';
+            document.querySelector('.tab-btn[onclick*="new-arrivals"]').classList.toggle('disabled', !hasNews);
+            document.querySelector('.tab-btn[onclick*="top-sellers"]').classList.toggle('disabled', !hasTops);
+            if (hasTops) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('.tab-btn[onclick*="top-sellers"]').classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                tops.classList.add('active');
+            } else if (hasNews) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('.tab-btn[onclick*="new-arrivals"]').classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                news.classList.add('active');
+            }
+        }
 
         onValue(ref(db, 'products'), (snapshot) => {
             const data = snapshot.val();
             if (!data) return;
             cachedProducts = data;
+        });
 
-            const popular = document.getElementById('popular-products');
+        onValue(ref(db, 'categories'), (snapshot) => {
+            categories = snapshot.val() || [];
+            renderCategories();
+        });
+
+        onValue(ref(db, 'newArrivals'), (snapshot) => {
+            const ids = snapshot.val() || [];
             const news = document.getElementById('new-arrivals');
-            const tops = document.getElementById('top-sellers');
-            
             let html = '';
-            Object.keys(data).forEach(id => {
-                const p = data[id];
-                html += `
-                <div class="product-card" style="background-image: url('${p.img}')" onclick="openProduct('${id}')">
-                    <div class="p-content">
-                        <div class="p-card-cat">${p.category || 'Загальне'}</div>
-                        <h3>${p.name}</h3>
-                        <p class="p-price">${p.price} грн</p>
-                    </div>
-                </div>`;
+            ids.forEach(id => {
+                const p = cachedProducts[id];
+                if (p) {
+                    html += `
+                    <div class="product-card" style="background-image: url('${p.img}')" onclick="openProduct('${id}')">
+                        <div class="p-content">
+                            <div class="p-card-cat">${p.category || 'Загальне'}</div>
+                            <h3>${p.name}</h3>
+                            <p class="p-price">${p.price} грн</p>
+                        </div>
+                    </div>`;
+                }
             });
-
-            popular.innerHTML = html;
             news.innerHTML = html;
+            updateTabs();
+        });
+
+        onValue(ref(db, 'topSellers'), (snapshot) => {
+            const ids = snapshot.val() || [];
+            const tops = document.getElementById('top-sellers');
+            let html = '';
+            ids.forEach(id => {
+                const p = cachedProducts[id];
+                if (p) {
+                    html += `
+                    <div class="product-card" style="background-image: url('${p.img}')" onclick="openProduct('${id}')">
+                        <div class="p-content">
+                            <div class="p-card-cat">${p.category || 'Загальне'}</div>
+                            <h3>${p.name}</h3>
+                            <p class="p-price">${p.price} грн</p>
+                        </div>
+                    </div>`;
+                }
+            });
             tops.innerHTML = html;
+            updateTabs();
         });
 
         if (localStorage.getItem('ageVerified') === 'true') {
             document.getElementById('age-verification').style.display = 'none';
             document.body.classList.remove('modal-open');
         }
+
+        // Highlight home link
+        document.getElementById('home-link').classList.add('active');
     </script>
 </body>
 </html>
-
