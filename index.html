@@ -354,17 +354,12 @@
             evt.currentTarget.classList.add("active");
         };
 
-        window.filterByCategory = (category) => {
-            // Remove active from all category buttons
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-            // Add active to clicked
-            event.target.classList.add('active');
-            // Filter products
+        function showProductsByCategory(category) {
             const container = document.getElementById('category-products');
             let html = '';
             Object.keys(cachedProducts).forEach(id => {
                 const p = cachedProducts[id];
-                if (p.category === category) {
+                if (p && p.category === category) {
                     html += `
                     <div class="product-card" style="background-image: url('${p.img}')" onclick="openProduct('${id}')">
                         <div class="p-content">
@@ -376,6 +371,16 @@
                 }
             });
             container.innerHTML = html ? `<div class="products-grid">${html}</div>` : '<p>Товарів у цій категорії немає</p>';
+        }
+
+        window.filterByCategory = (category, btnEl) => {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            else {
+                const found = Array.from(document.querySelectorAll('.category-btn')).find(b => b.textContent === category);
+                if (found) found.classList.add('active');
+            }
+            showProductsByCategory(category);
         };
 
         function renderCategories() {
@@ -385,9 +390,16 @@
                 const btn = document.createElement('div');
                 btn.className = 'category-btn';
                 btn.textContent = cat;
-                btn.onclick = () => filterByCategory(cat);
+                btn.onclick = (e) => filterByCategory(cat, e.currentTarget);
                 grid.appendChild(btn);
             });
+            // Auto-select first category if exists
+            if (categories.length > 0) {
+                setTimeout(() => {
+                    const first = grid.querySelector('.category-btn');
+                    if (first) first.click();
+                }, 50);
+            }
         }
 
         function updateTabs() {
