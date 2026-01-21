@@ -132,6 +132,37 @@
 
     <h2>Товари в базі даних</h2>
     <div class="product-list" id="admin-product-grid">Завантаження...</div>
+
+    <div class="form-card">
+        <h2>Управління новинками</h2>
+        <div style="margin-bottom: 20px;">
+            <select id="new-select" style="width: 70%; margin-right: 10px;">
+                <option value="">Оберіть товар для новинок</option>
+            </select>
+            <button onclick="addToNew()">Додати до новинок</button>
+        </div>
+        <div id="new-list"></div>
+    </div>
+
+    <div class="form-card">
+        <h2>Управління топовими товарами</h2>
+        <div style="margin-bottom: 20px;">
+            <select id="top-select" style="width: 70%; margin-right: 10px;">
+                <option value="">Оберіть товар для топових</option>
+            </select>
+            <button onclick="addToTop()">Додати до топових</button>
+        </div>
+        <div id="top-list"></div>
+    </div>
+
+    <div class="form-card">
+        <h2>Управління категоріями</h2>
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="new-category" placeholder="Назва нової категорії" style="width: 70%; margin-right: 10px;">
+            <button onclick="addCategory()">Додати категорію</button>
+        </div>
+        <div id="category-list"></div>
+    </div>
 </div>
 
 <script>
@@ -151,6 +182,11 @@
     }
     const db = firebase.database();
 
+    let cachedProducts = {};
+    let newArrivals = [];
+    let topSellers = [];
+    let categories = [];
+
     const form = document.getElementById('product-form');
     const grid = document.getElementById('admin-product-grid');
 
@@ -159,6 +195,7 @@
         db.ref('products').on('value', (snapshot) => {
             grid.innerHTML = '';
             const data = snapshot.val();
+            cachedProducts = data || {};
             if (data) {
                 Object.keys(data).forEach((id) => {
                     const p = data[id];
@@ -179,6 +216,7 @@
             } else {
                 grid.innerHTML = '<p>Товарів немає</p>';
             }
+            populateSelects();
         }, (error) => {
             console.error("Помилка читання:", error);
             grid.innerHTML = '<p style="color:red">Помилка доступу до бази даних!</p>';
@@ -239,8 +277,23 @@
     // Видалення
     window.deleteProduct = (id) => {
         if(confirm('Видалити цей товар?')) {
+            // Видалити з products
             db.ref('products/' + id).remove()
-                .then(() => alert('Видалено'))
+                .then(() => {
+                    // Видалити з newArrivals якщо є
+                    const newIndex = newArrivals.indexOf(id);
+                    if (newIndex > -1) {
+                        newArrivals.splice(newIndex, 1);
+                        db.ref('newArrivals').set(newArrivals);
+                    }
+                    // Видалити з topSellers якщо є
+                    const topIndex = topSellers.indexOf(id);
+                    if (topIndex > -1) {
+                        topSellers.splice(topIndex, 1);
+                        db.ref('topSellers').set(topSellers);
+                    }
+                    alert('Видалено');
+                })
                 .catch(err => alert('Помилка: ' + err.message));
         }
     };
@@ -257,6 +310,138 @@
 
     // Запуск
     fetchProducts();
+
+    db.ref('newArrivals').on('value', (snapshot) => {
+        newArrivals = snapshot.val() || [];
+        renderNewList();
+    });
+
+    db.ref('topSellers').on('value', (snapshot) => {
+        topSellers = snapshot.val() || [];
+        renderTopList();
+    });
+
+    db.ref('categories').on('value', (snapshot) => {
+        categories = snapshot.val() || [];
+        if (categories.length === 0) {
+            // Додати дефолтні категорії
+            categories = ['Інгалятори', 'Речовини для інгаляторів', 'Дистиляти', 'Міні Бонги', 'Гриндери-подрібнювачі', 'Ковпаки(Наперстки)', 'Суцвіття', 'Косяки'];
+            db.ref('categories').set(categories);
+        }
+        renderCategoryList();
+        populateCategorySelect();
+    });
+
+    function populateSelects() {
+        const newSelect = document.getElementById('new-select');
+        const topSelect = document.getElementById('top-select');
+        newSelect.innerHTML = '<option value="">Оберіть товар для новинок</option>';
+        topSelect.innerHTML = '<option value="">Оберіть товар для топових</option>';
+        Object.keys(cachedProducts).forEach(id => {
+            const p = cachedProducts[id];
+            const option = `<option value="${id}">${p.name}</option>`;
+            newSelect.innerHTML += option;
+            topSelect.innerHTML += option;
+        });
+    }
+
+    function renderNewList() {
+        const container = document.getElementById('new-list');
+        container.innerHTML = '';
+        newArrivals.forEach(id => {
+            const p = cachedProducts[id];
+            if (p) {
+                const div = document.createElement('div');
+                div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
+                div.innerHTML = `<span>${p.name}</span><button onclick="removeFromNew('${id}')">Видалити</button>`;
+                container.appendChild(div);
+            }
+        });
+    }
+
+    function renderTopList() {
+        const container = document.getElementById('top-list');
+        container.innerHTML = '';
+        topSellers.forEach(id => {
+            const p = cachedProducts[id];
+            if (p) {
+                const div = document.createElement('div');
+                div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
+                div.innerHTML = `<span>${p.name}</span><button onclick="removeFromTop('${id}')">Видалити</button>`;
+                container.appendChild(div);
+            }
+        });
+    }
+
+    window.addToNew = () => {
+        const select = document.getElementById('new-select');
+        const id = select.value;
+        if (!id || newArrivals.includes(id)) return;
+        newArrivals.push(id);
+        db.ref('newArrivals').set(newArrivals);
+        select.value = '';
+    };
+
+    window.addToTop = () => {
+        const select = document.getElementById('top-select');
+        const id = select.value;
+        if (!id || topSellers.includes(id)) return;
+        topSellers.push(id);
+        db.ref('topSellers').set(topSellers);
+        select.value = '';
+    };
+
+    window.removeFromNew = (id) => {
+        const index = newArrivals.indexOf(id);
+        if (index > -1) {
+            newArrivals.splice(index, 1);
+            db.ref('newArrivals').set(newArrivals);
+        }
+    };
+
+    window.removeFromTop = (id) => {
+        const index = topSellers.indexOf(id);
+        if (index > -1) {
+            topSellers.splice(index, 1);
+            db.ref('topSellers').set(topSellers);
+        }
+    };
+
+    window.addCategory = () => {
+        const input = document.getElementById('new-category');
+        const cat = input.value.trim();
+        if (!cat || categories.includes(cat)) return;
+        categories.push(cat);
+        db.ref('categories').set(categories);
+        input.value = '';
+    };
+
+    window.removeCategory = (cat) => {
+        const index = categories.indexOf(cat);
+        if (index > -1) {
+            categories.splice(index, 1);
+            db.ref('categories').set(categories);
+        }
+    };
+
+    function renderCategoryList() {
+        const container = document.getElementById('category-list');
+        container.innerHTML = '';
+        categories.forEach(cat => {
+            const div = document.createElement('div');
+            div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
+            div.innerHTML = `<span>${cat}</span><button onclick="removeCategory('${cat}')">Видалити</button>`;
+            container.appendChild(div);
+        });
+    }
+
+    function populateCategorySelect() {
+        const select = document.getElementById('p-category');
+        select.innerHTML = '<option value="">Оберіть категорію</option>';
+        categories.forEach(cat => {
+            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+    }
 </script>
 </body>
 </html>
