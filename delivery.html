@@ -35,13 +35,11 @@
             background-attachment: fixed;
         }
 
-        /* --- ШАПКА ТА МЕНЮ (ВИПРАВЛЕНО) --- */
+        /* --- ШАПКА --- */
         header {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px 15px;
-            position: relative; /* Щоб меню рахувалося від шапки */
-            z-index: 10001; /* Поверх усього контенту */
         }
 
         .top-bar {
@@ -63,7 +61,6 @@
             padding: 12px 35px;
             border-radius: 100px;
             border: 1px solid var(--glass-border);
-            position: relative;
         }
 
         .logo {
@@ -100,6 +97,9 @@
 
         .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; }
 
+        /* Backdrop for mobile menu */
+        .menu-backdrop { display: none; }
+
         .cart-badge {
             background: var(--glass-border);
             padding: 4px 12px;
@@ -135,8 +135,6 @@
             max-width: 1000px;
             margin: 60px auto;
             padding: 0 20px;
-            position: relative;
-            z-index: 1; /* Нижчий пріоритет, ніж у меню */
         }
 
         h1.faq-title {
@@ -167,6 +165,7 @@
             letter-spacing: 1px;
         }
 
+        /* Іконка стрілочки */
         summary::after {
             content: '';
             width: 8px;
@@ -190,42 +189,46 @@
 
         .faq-content strong { color: #fff; }
 
-        /* --- МЕДІА ЗАПИТИ (МОБІЛЬНЕ МЕНЮ) --- */
+        ul { padding-left: 20px; margin-top: 10px; }
+        li { margin-bottom: 8px; }
+
         @media (max-width: 768px) {
             header { padding: 15px 10px; }
             .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
-            .navbar { padding: 10px 20px; border-radius: 50px; }
-            
-            .nav-links { 
-                display: none; 
-                position: absolute; 
-                top: 65px; /* Випадає одразу під навбаром */
-                left: 0; 
-                width: 100%; 
-                background: #0a2a3a; /* Суцільний фон, щоб не просвічувало */
-                backdrop-filter: blur(20px);
-                border-radius: 0 0 20px 20px; 
-                border: 1px solid var(--glass-border); 
-                border-top: none; 
-                flex-direction: column; 
-                gap: 5px; 
-                padding: 20px; 
-                z-index: 9999;
-            }
-
-            .nav-links.active { display: flex; }
-            .nav-links a { font-size: 16px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-            .nav-links li:last-child a { border-bottom: none; }
-            
+            .navbar { padding: 10px 20px; flex-wrap: wrap; }
+            .logo { font-size: 18px; }
+            .nav-links { display: none; background: var(--glass); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none; flex-direction: column; gap: 15px; padding: 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+            .nav-links.active { display: flex; max-height: 500px; }
+            .nav-links a { font-size: 16px; padding: 10px 0; }
             .hamburger { display: block; }
             .nav-icons { gap: 15px; }
+            .delivery-content { padding: 20px 15px; }
+            .delivery-content h1 { font-size: 28px; }
+            .delivery-content h2 { font-size: 22px; margin-top: 30px; }
+            .delivery-content p { font-size: 14px; }
+            .faq-content { padding: 20px 15px; }
+            .faq-content h2 { font-size: 22px; }
+            .faq-item { margin-bottom: 20px; }
+            .faq-question { font-size: 16px; padding: 15px; }
+            .faq-answer { font-size: 14px; padding: 15px; }
         }
 
         @media (max-width: 480px) {
             .navbar { padding: 8px 15px; }
             .logo { font-size: 16px; }
-            .faq-title { font-size: 24px; text-align: center; }
-            summary { padding: 20px; font-size: 12px; }
+            .nav-links { padding: 15px; }
+            .nav-links a { font-size: 14px; }
+            .nav-icons { gap: 12px; font-size: 16px; }
+            .cart-badge { padding: 3px 8px; font-size: 12px; }
+            .delivery-content { padding: 15px 10px; }
+            .delivery-content h1 { font-size: 24px; }
+            .delivery-content h2 { font-size: 20px; margin-top: 25px; }
+            .delivery-content p { font-size: 13px; }
+            .faq-content { padding: 15px 10px; }
+            .faq-content h2 { font-size: 20px; }
+            .faq-item { margin-bottom: 15px; }
+            .faq-question { font-size: 14px; padding: 12px; }
+            .faq-answer { font-size: 13px; padding: 12px; }
         }
     </style>
 </head>
@@ -242,24 +245,15 @@
             <ul class="nav-links">
                 <li><a href="index.html" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#" onclick="closeMenu()">Магазин</a></li>
-                <li><a href="#" onclick="closeMenu()">Про нас</a></li>
-                <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
+                <li><a href="#" onclick="closeMenu()">Доставка</a></li>
                 <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
             <button class="hamburger" onclick="toggleMenu()">☰</button>
             <div class="nav-icons">
-                <span>🔍</span>
-                <span>👤</span>
-                <div class="cart-badge">🛒 0</div>
             </div>
         </nav>
 
         <div class="categories">
-            <div class="cat-item">🌙 ДЛЯ СНУ</div>
-            <div class="cat-item">🎯 КОНЦЕНТРАЦІЯ</div>
-            <div class="cat-item">☁️ РОЗСЛАБЛЕННЯ</div>
-            <div class="cat-item">✨ ЛІБІДО</div>
-            <div class="cat-item">🔋 ВІДПОЧИНОК</div>
         </div>
     </header>
 
