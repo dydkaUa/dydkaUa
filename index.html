@@ -305,10 +305,10 @@
             <button type="button" class="close-contact-modal" onclick="closeContactModal()">&times;</button>
             <h2>Виберіть спосіб зв'язку</h2>
             <div class="contact-buttons">
-                <a href="https://t.me/your_telegram_username" target="_blank" class="contact-btn contact-btn-tg">
+                <a id="tg-link" href="#" target="_blank" class="contact-btn contact-btn-tg">
                     <span>📱</span> Телеграм
                 </a>
-                <a href="https://instagram.com/your_instagram_username" target="_blank" class="contact-btn contact-btn-ig">
+                <a id="ig-link" href="#" target="_blank" class="contact-btn contact-btn-ig">
                     <span>📷</span> Інстаграм
                 </a>
             </div>
@@ -402,6 +402,7 @@
 
         let cachedProducts = {};
         let categories = [];
+        let contacts = { telegram: '#', instagram: '#' };
 
         window.goToCategories = () => {
             // Close mobile menu then scroll to categories
@@ -437,6 +438,8 @@
         };
 
         window.showContactModal = () => {
+            document.getElementById('tg-link').href = contacts.telegram;
+            document.getElementById('ig-link').href = contacts.instagram;
             document.getElementById('contact-modal').style.display = 'flex';
         };
 
@@ -546,6 +549,14 @@
         onValue(ref(db, 'categories'), (snapshot) => {
             categories = snapshot.val() || [];
             renderCategories();
+        });
+
+        onValue(ref(db, 'contacts'), (snapshot) => {
+            const data = snapshot.val() || {};
+            contacts = {
+                telegram: data.telegram || '#',
+                instagram: data.instagram || '#'
+            };
         });
 
         onValue(ref(db, 'newArrivals'), (snapshot) => {
