@@ -2,317 +2,491 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhytoLab — Доставка та оплата</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Admin Panel — PhytoLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --bg-ocean: linear-gradient(135deg, #0a2a3a 0%, #1e3a5f 50%, #2d5a7a 100%);
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
             --accent-seafoam: #7FFFD4;
+            --glass: rgba(255, 255, 255, 0.08);
             --text-light: #e0f7fa;
-            --color-sleep: #ffe082;
-            --color-focus: #80deea;
-            --color-relax: #4fc3f7;
-            --color-libido: #ffab91;
-            --color-rest: #81c784;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
             font-family: 'Montserrat', sans-serif;
             background: var(--bg-ocean);
             color: var(--text-light);
-            line-height: 1.6;
-            background-attachment: fixed;
+            padding: 40px;
+            min-height: 100vh;
         }
-
-        /* --- ШАПКА --- */
-        header {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 15px;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-            opacity: 0.6;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .admin-container { max-width: 1000px; margin: 0 auto; }
+        .form-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            padding: 12px 35px;
-            border-radius: 100px;
-            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
         }
-
-        .logo {
+        h2 { color: var(--accent-seafoam); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(30, 58, 95, 0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-light);
+            border-radius: 8px;
+            outline: none;
+        }
+        button {
+            background: var(--accent-seafoam);
+            color: #0a2a3a;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
             font-weight: 700;
-            font-size: 22px;
-            letter-spacing: -1px;
-            background: linear-gradient(45deg, #fff, var(--accent-seafoam));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 400;
             transition: 0.3s;
         }
-
-        .nav-links a:hover { color: var(--accent-seafoam); }
-
-        .nav-icons {
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .item-card {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .item-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .actions { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .btn-edit { background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        
+        .category-item {
             display: flex;
-            gap: 18px;
+            justify-content: space-between;
             align-items: center;
-            font-size: 18px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
         }
-
-        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; transition: all 0.3s ease; border-radius: 5px; }
-        .hamburger:hover { background: rgba(0, 206, 209, 0.1); transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-
-        /* Backdrop for mobile menu */
-        .menu-backdrop { display: none; }
-
-        .cart-badge {
-            background: var(--glass-border);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .cat-item {
+        .category-item-text {
             display: flex;
             align-items: center;
             gap: 10px;
-            cursor: pointer;
-            padding: 10px 18px;
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
-            transition: 0.3s;
+            flex: 1;
         }
-
-        .cat-item svg { width: 22px; height: 22px; }
-        .cat-item:hover { color: #fff; transform: translateY(-2px); }
-
-        /* --- FAQ SECTION --- */
-        .faq-container {
-            max-width: 1000px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        h1.faq-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            letter-spacing: 1px;
-        }
-
-        .faq-item {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 15px;
-            margin-bottom: 12px;
-            border: 1px solid var(--glass-border);
-            overflow: hidden;
-        }
-
-        summary {
-            padding: 25px 30px;
-            list-style: none;
+        .category-controls {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            gap: 5px;
         }
-
-        /* Іконка стрілочки */
-        summary::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-right: 2px solid #fff;
-            border-bottom: 2px solid #fff;
-            transform: rotate(45deg);
-            transition: 0.3s;
-        }
-
-        details[open] summary::after {
-            transform: rotate(-135deg);
-        }
-
-        .faq-content {
-            padding: 0 30px 30px 30px;
-            color: #bbb;
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        .faq-content strong { color: #fff; }
-
-        ul { padding-left: 20px; margin-top: 10px; }
-        li { margin-bottom: 8px; }
-
-        @media (max-width: 768px) {
-            header { padding: 15px 10px; }
-            .top-bar { flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
-            .navbar { padding: 10px 20px; flex-wrap: wrap; position: relative; }
-            .logo { font-size: 18px; }
-            .nav-links {
-                position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(10, 42, 58, 0.95); backdrop-filter: blur(20px);
-                flex-direction: column; gap: 0; padding: 0;
-                display: none; overflow: hidden; transition: 0.3s ease-out;
-                border-radius: 20px; border: 1px solid var(--glass-border); margin-top: 10px;
-            }
-            .nav-links.active { display: flex; padding: 20px 0; }
-            .nav-links li { text-align: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-            .nav-links li:last-child { border: none; }
-            .nav-links a { font-size: 16px; padding: 10px 0; }
-            .hamburger { display: block; }
-            .nav-icons { gap: 15px; }
-            .delivery-content { padding: 20px 15px; }
-            .delivery-content h1 { font-size: 28px; }
-            .delivery-content h2 { font-size: 22px; margin-top: 30px; }
-            .delivery-content p { font-size: 14px; }
-            .faq-content { padding: 20px 15px; }
-            .faq-content h2 { font-size: 22px; }
-            .faq-item { margin-bottom: 20px; }
-            .faq-question { font-size: 16px; padding: 15px; }
-            .faq-answer { font-size: 14px; padding: 15px; }
-        }
-
-        @media (max-width: 480px) {
-            .navbar { padding: 8px 15px; }
-            .logo { font-size: 16px; }
-            .nav-links { padding: 15px; }
-            .nav-links a { font-size: 14px; }
-            .nav-icons { gap: 12px; font-size: 16px; }
-            .cart-badge { padding: 3px 8px; font-size: 12px; }
-            .delivery-content { padding: 15px 10px; }
-            .delivery-content h1 { font-size: 24px; }
-            .delivery-content h2 { font-size: 20px; margin-top: 25px; }
-            .delivery-content p { font-size: 13px; }
-            .faq-content { padding: 15px 10px; }
-            .faq-content h2 { font-size: 20px; }
-            .faq-item { margin-bottom: 15px; }
-            .faq-question { font-size: 14px; padding: 12px; }
-            .faq-answer { font-size: 13px; padding: 12px; }
-        }
+        .btn-move { background: #6366f1; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .btn-move:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="top-bar">
-            <span>Перший центр легального задоволення</span>
-            <span>+38 (073) 625-44-64 &nbsp; IG • TK • YT • TG</span>
-        </div>
+<script>
+    (function() {
+        const password = prompt("Введіть пароль адміністратора:");
+        if (password !== "1234") { 
+            alert("Доступ заборонено!");
+            window.location.href = "index.html"; 
+        }
+    })();
+</script>
 
-        <nav class="navbar">
-            <div class="logo">PhytoLab</div>
-            <ul class="nav-links" id="main-menu">
-                <li><a href="index.html" onclick="closeMenu()">Головна</a></li>
-                <li><a href="index.html#categories" onclick="closeMenu()">Магазин</a></li>
-                <li><a href="#" onclick="closeMenu()">Доставка</a></li>
-                <li><a href="#" onclick="closeMenu()">Контакти</a></li>
-            </ul>
-            <button class="hamburger" onclick="toggleMenu()">☰</button>
-        </nav>
-
-        <div class="categories">
-        </div>
-    </header>
-
-    <main class="faq-container">
-        <h1 class="faq-title">FAQ</h1>
-
-        <details class="faq-item">
-            <summary>ІНФОРМАЦІЯ ПРО ДОСТАВКУ</summary>
-            <div class="faq-content">
-                <p>Ми доставляємо ваші замовлення по всій Україні через <strong>Нову Пошту</strong>:</p>
-                <ul>
-                    <li>Відправка здійснюється в день замовлення (до 17:00).</li>
-                    <li>Терміни доставки: 1-2 робочі дні.</li>
-                    <li>Вартість — за тарифами перевізника.</li>
-                </ul>
+<div class="admin-container">
+    <h1>Управління PhytoLab ⚙️</h1>
+    <p><a href="index.html" style="color: var(--accent-seafoam); text-decoration: none;">← На головну сторінку</a></p>
+    
+    <div class="form-card">
+        <h2 id="form-title">Додати новий товар</h2>
+        <form id="product-form">
+            <input type="hidden" id="edit-id">
+            <div class="form-group">
+                <label>Назва товару</label>
+                <input type="text" id="p-name" required placeholder="Наприклад: Мухоморний чай">
             </div>
-        </details>
-
-        <details class="faq-item">
-            <summary>СПОСОБИ ОПЛАТИ</summary>
-            <div class="faq-content">
-                <p>Ви можете обрати зручний варіант оплати:</p>
-                <ul>
-                    <li><strong>Онлайн на сайті</strong> (Apple Pay, Google Pay, Visa/Mastercard).</li>
-                    <li><strong>Післяплата</strong> при отриманні на пошті.</li>
-                    <li>Переказ на розрахунковий рахунок.</li>
-                </ul>
+            <div class="form-group">
+                <label>Ціна (грн)</label>
+                <input type="number" id="p-price" required placeholder="500">
             </div>
-        </details>
-
-        <details class="faq-item">
-            <summary>ІНФОРМАЦІЯ ПРО КУПІВЛЮ ТА ПОВЕРНЕННЯ</summary>
-            <div class="faq-content">
-                <p>Ми гарантуємо якість нашої продукції:</p>
-                <ul>
-                    <li>Товар підлягає обміну, якщо виявлено заводський брак.</li>
-                    <li>Повернення можливе протягом 14 днів, якщо пакування не було пошкоджене та герметичність не порушена.</li>
-                    <li>Для оформлення зверніться в наш Telegram або за номером телефону.</li>
-                </ul>
+            <div class="form-group">
+                <label>Посилання на фото (URL)</label>
+                <input type="text" id="p-img" required placeholder="Вставте посилання (https://...)">
             </div>
-        </details>
-    </main>
-
-    <script>
-        window.toggleMenu = () => document.getElementById('main-menu').classList.toggle('active');
-        window.closeMenu = () => document.getElementById('main-menu').classList.remove('active');
-    </script>
-
-    <!-- Protected Data Field -->
-    <div style="text-align: center; padding: 20px; opacity: 0.5; font-size: 12px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
-        <p>© 2026 - Дані захищено</p>
+            <div class="form-group">
+                <label>Опис</label>
+                <textarea id="p-desc" rows="3" placeholder="Опишіть товар..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Категорія</label>
+                <select id="p-category" required>
+                    <option value="">Оберіть категорію</option>
+                    <option value="ДЛЯ СНУ">ДЛЯ СНУ</option>
+                    <option value="КОНЦЕНТРАЦІЯ">КОНЦЕНТРАЦІЯ</option>
+                    <option value="РОЗСЛАБЛЕННЯ">РОЗСЛАБЛЕННЯ</option>
+                    <option value="ЛІБІДО">ЛІБІДО</option>
+                    <option value="ВІДПОЧИНОК">ВІДПОЧИНОК</option>
+                </select>
+            </div>
+            <button type="submit" id="submit-btn">Зберегти товар</button>
+            <button type="button" id="cancel-btn" style="display:none; background:#555; color: white;">Відмінити</button>
+        </form>
     </div>
-</body>
-</html>
 
+    <h2>Товари в базі даних</h2>
+    <div class="product-list" id="admin-product-grid">Завантаження...</div>
+
+    <div class="form-card">
+        <h2>Управління новинками</h2>
+        <div style="margin-bottom: 20px;">
+            <select id="new-select" style="width: 70%; margin-right: 10px;">
+                <option value="">Оберіть товар для новинок</option>
+            </select>
+            <button onclick="addToNew()">Додати до новинок</button>
+        </div>
+        <div id="new-list"></div>
+    </div>
+
+    <div class="form-card">
+        <h2>Управління топовими товарами</h2>
+        <div style="margin-bottom: 20px;">
+            <select id="top-select" style="width: 70%; margin-right: 10px;">
+                <option value="">Оберіть товар для топових</option>
+            </select>
+            <button onclick="addToTop()">Додати до топових</button>
+        </div>
+        <div id="top-list"></div>
+    </div>
+
+    <div class="form-card">
+        <h2>Управління категоріями</h2>
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="new-category" placeholder="Назва нової категорії" style="width: 70%; margin-right: 10px;">
+            <button onclick="addCategory()">Додати категорію</button>
+        </div>
+        <div id="category-list"></div>
+    <div class="form-card">
+        <h2>Управління контактами</h2>
+        <div class="form-group">
+            <label>Посилання на Телеграм</label>
+            <input type="text" id="contact-telegram" placeholder="https://t.me/...">
+        </div>
+        <div class="form-group">
+            <label>Посилання на Інстаграм</label>
+            <input type="text" id="contact-instagram" placeholder="https://instagram.com/...">
+        </div>
+        <button onclick="saveContacts()">Зберегти контакти</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCoMilBNzczqZh_KVJVwvpt24EOgK5NnHQ",
+        authDomain: "hapevasek.firebaseapp.com",
+        databaseURL: "https://hapevasek-default-rtdb.firebaseio.com",
+        projectId: "hapevasek",
+        storageBucket: "hapevasek.firebasestorage.app",
+        messagingSenderId: "534239781720",
+        appId: "1:534239781720:web:c1777589cf46d5cff97b2d"
+    };
+
+    // Ініціалізація Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    let cachedProducts = {};
+    let newArrivals = [];
+    let topSellers = [];
+    let categories = [];
+
+    const form = document.getElementById('product-form');
+    const grid = document.getElementById('admin-product-grid');
+
+    // Функція отримання товарів
+    function fetchProducts() {
+        db.ref('products').on('value', (snapshot) => {
+            grid.innerHTML = '';
+            const data = snapshot.val();
+            cachedProducts = data || {};
+            if (data) {
+                Object.keys(data).forEach((id) => {
+                    const p = data[id];
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'" alt="">
+                        <h3>${p.name}</h3>
+                        <p>${p.price} грн</p>
+                        <small>${p.category || 'Без категорії'}</small>
+                        <div class="actions">
+                            <button class="btn-edit" onclick="prepareEdit('${id}')">✎</button>
+                            <button class="btn-delete" onclick="deleteProduct('${id}')">🗑</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                grid.innerHTML = '<p>Товарів немає</p>';
+            }
+            populateSelects();
+        }, (error) => {
+            console.error("Помилка читання:", error);
+            grid.innerHTML = '<p style="color:red">Помилка доступу до бази даних!</p>';
+        });
+    }
+
+    // Обробка форми
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('edit-id').value;
+        const productData = {
+            name: document.getElementById('p-name').value,
+            price: document.getElementById('p-price').value,
+            img: document.getElementById('p-img').value,
+            description: document.getElementById('p-desc').value,
+            category: document.getElementById('p-category').value,
+            timestamp: Date.now()
+        };
+
+        try {
+            if (id) {
+                // Оновлення
+                await db.ref('products/' + id).update(productData);
+                alert('Товар оновлено!');
+            } else {
+                // Додавання
+                await db.ref('products').push(productData);
+                alert('Товар додано успішно!');
+            }
+            resetForm();
+        } catch (error) {
+            console.error("Помилка запису:", error);
+            alert("Помилка: " + error.message);
+        }
+    });
+
+    // Редагування
+    window.prepareEdit = (id) => {
+        db.ref('products/' + id).once('value', (snap) => {
+            const p = snap.val();
+            if (!p) return;
+
+            document.getElementById('p-name').value = p.name || '';
+            document.getElementById('p-price').value = p.price || '';
+            document.getElementById('p-img').value = p.img || '';
+            document.getElementById('p-desc').value = p.description || p.desc || '';
+            document.getElementById('p-category').value = p.category || '';
+            document.getElementById('edit-id').value = id;
+            
+            document.getElementById('form-title').innerText = "Редагувати товар";
+            document.getElementById('submit-btn').innerText = "Оновити";
+            document.getElementById('cancel-btn').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    };
+
+    // Видалення
+    window.deleteProduct = (id) => {
+        if(confirm('Видалити цей товар?')) {
+            // Видалити з products
+            db.ref('products/' + id).remove()
+                .then(() => {
+                    // Видалити з newArrivals якщо є
+                    const newIndex = newArrivals.indexOf(id);
+                    if (newIndex > -1) {
+                        newArrivals.splice(newIndex, 1);
+                        db.ref('newArrivals').set(newArrivals);
+                    }
+                    // Видалити з topSellers якщо є
+                    const topIndex = topSellers.indexOf(id);
+                    if (topIndex > -1) {
+                        topSellers.splice(topIndex, 1);
+                        db.ref('topSellers').set(topSellers);
+                    }
+                    alert('Видалено');
+                })
+                .catch(err => alert('Помилка: ' + err.message));
+        }
+    };
+
+    function resetForm() {
+        form.reset();
+        document.getElementById('edit-id').value = "";
+        document.getElementById('form-title').innerText = "Додати новий товар";
+        document.getElementById('submit-btn').innerText = "Зберегти товар";
+        document.getElementById('cancel-btn').style.display = "none";
+    }
+
+    document.getElementById('cancel-btn').onclick = resetForm;
+
+    // Запуск
+    fetchProducts();
+
+    db.ref('newArrivals').on('value', (snapshot) => {
+        newArrivals = snapshot.val() || [];
+        renderNewList();
+    });
+
+    db.ref('topSellers').on('value', (snapshot) => {
+        topSellers = snapshot.val() || [];
+        renderTopList();
+    });
+
+    db.ref('categories').on('value', (snapshot) => {
+        categories = snapshot.val() || [];
+        if (categories.length === 0) {
+            // Додати дефолтні категорії
+            categories = ['Інгалятори', 'Речовини для інгаляторів', 'Дистиляти', 'Міні Бонги', 'Гриндери-подрібнювачі', 'Ковпаки(Наперстки)', 'Суцвіття', 'Косяки'];
+            db.ref('categories').set(categories);
+        }
+        renderCategoryList();
+        populateCategorySelect();
+    });
+
+    function populateSelects() {
+        const newSelect = document.getElementById('new-select');
+        const topSelect = document.getElementById('top-select');
+        newSelect.innerHTML = '<option value="">Оберіть товар для новинок</option>';
+        topSelect.innerHTML = '<option value="">Оберіть товар для топових</option>';
+        Object.keys(cachedProducts).forEach(id => {
+            const p = cachedProducts[id];
+            const option = `<option value="${id}">${p.name}</option>`;
+            newSelect.innerHTML += option;
+            topSelect.innerHTML += option;
+        });
+    }
+
+    function renderNewList() {
+        const container = document.getElementById('new-list');
+        container.innerHTML = '';
+        newArrivals.forEach(id => {
+            const p = cachedProducts[id];
+            if (p) {
+                const div = document.createElement('div');
+                div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
+                div.innerHTML = `<span>${p.name}</span><button onclick="removeFromNew('${id}')">Видалити</button>`;
+                container.appendChild(div);
+            }
+        });
+    }
+
+    function renderTopList() {
+        const container = document.getElementById('top-list');
+        container.innerHTML = '';
+        topSellers.forEach(id => {
+            const p = cachedProducts[id];
+            if (p) {
+                const div = document.createElement('div');
+                div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
+                div.innerHTML = `<span>${p.name}</span><button onclick="removeFromTop('${id}')">Видалити</button>`;
+                container.appendChild(div);
+            }
+        });
+    }
+
+    window.addToNew = () => {
+        const select = document.getElementById('new-select');
+        const id = select.value;
+        if (!id || newArrivals.includes(id)) return;
+        newArrivals.push(id);
+        db.ref('newArrivals').set(newArrivals);
+        select.value = '';
+    };
+
+    window.addToTop = () => {
+        const select = document.getElementById('top-select');
+        const id = select.value;
+        if (!id || topSellers.includes(id)) return;
+        topSellers.push(id);
+        db.ref('topSellers').set(topSellers);
+        select.value = '';
+    };
+
+    window.removeFromNew = (id) => {
+        const index = newArrivals.indexOf(id);
+        if (index > -1) {
+            newArrivals.splice(index, 1);
+            db.ref('newArrivals').set(newArrivals);
+        }
+    };
+
+    window.removeFromTop = (id) => {
+        const index = topSellers.indexOf(id);
+        if (index > -1) {
+            topSellers.splice(index, 1);
+            db.ref('topSellers').set(topSellers);
+        }
+    };
+
+    window.addCategory = () => {
+        const input = document.getElementById('new-category');
+        const cat = input.value.trim();
+        if (!cat || categories.includes(cat)) return;
+        categories.push(cat);
+        db.ref('categories').set(categories);
+        input.value = '';
+    };
+
+    window.removeCategory = (cat) => {
+        const index = categories.indexOf(cat);
+        if (index > -1) {
+            categories.splice(index, 1);
+            db.ref('categories').set(categories);
+        }
+    };
+
+    window.moveCategory = (index, direction) => {
+        if (direction === -1 && index > 0) {
+            // Переместить вверх
+            [categories[index], categories[index - 1]] = [categories[index - 1], categories[index]];
+            db.ref('categories').set(categories);
+        } else if (direction === 1 && index < categories.length - 1) {
+            // Переместить вниз
+            [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
+            db.ref('categories').set(categories);
+        }
+    };
+
+    function renderCategoryList() {
+        const container = document.getElementById('category-list');
+        container.innerHTML = '';
+        categories.forEach((cat, index) => {
+            const div = document.createElement('div');
+            div.className = 'category-item';
+            const moveUp = index > 0;
+            const moveDown = index < categories.length - 1;
+            div.innerHTML = `
+                <div class="category-item-text">
+                    <span style="font-weight: 600;">${cat}</span>
+                </div>
+                <div class="category-controls">
+                    <button class="btn-move" onclick="moveCategory(${index}, -1)" ${!moveUp ? 'disabled' : ''}>↑</button>
+                    <button class="btn-move" onclick="moveCategory(${index}, 1)" ${!moveDown ? 'disabled' : ''}>↓</button>
+                    <button class="btn-delete" onclick="removeCategory('${cat}')">🗑</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
