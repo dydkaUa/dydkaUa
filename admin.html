@@ -424,25 +424,30 @@
         }
     };
 
-    window.moveCategoryUp = (cat) => {
-        const index = categories.indexOf(cat);
-        if (index > 0) {
-            [categories[index - 1], categories[index]] = [categories[index], categories[index - 1]];
-            db.ref('categories').set(categories);
-        }
-    };
-
-    window.moveCategoryDown = (cat) => {
-        const index = categories.indexOf(cat);
-        if (index < categories.length - 1) {
-            [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
-            db.ref('categories').set(categories);
-        }
-    };
-
     function renderCategoryList() {
         const container = document.getElementById('category-list');
         container.innerHTML = '';
         categories.forEach((cat, index) => {
-       
+            const div = document.createElement('div');
+            div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '10px'; div.style.padding = '10px'; div.style.background = 'rgba(0,0,0,0.2)'; div.style.borderRadius = '8px';
+            
+            let buttons = `<div style="display:flex; gap:5px;">`;
+            if (index > 0) buttons += `<button style="background: #3b82f6; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;" onclick="moveCategoryUp('${cat}')">↑</button>`;
+            if (index < categories.length - 1) buttons += `<button style="background: #3b82f6; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;" onclick="moveCategoryDown('${cat}')">↓</button>`;
+            buttons += `<button onclick="removeCategory('${cat}')" style="background: #ef4444; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;">Видалити</button></div>`;
+            
+            div.innerHTML = `<span style="flex:1;">${cat}</span>${buttons}`;
+            container.appendChild(div);
+        });
+    }
 
+    function populateCategorySelect() {
+        const select = document.getElementById('p-category');
+        select.innerHTML = '<option value="">Оберіть категорію</option>';
+        categories.forEach(cat => {
+            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+    }
+</script>
+</body>
+</html>
