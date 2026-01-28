@@ -41,7 +41,7 @@
         .modal-content {
             background: #0a2a3a; width: 100%; max-width: 600px;
             max-height: 90vh; border-radius: 30px; border: 1px solid var(--glass-border);
-            position: relative; overflow-y: auto; overflow-x: auto; display: flex; flex-direction: column;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
             animation: zoomIn 0.3s ease;
         }
         .modal-content::-webkit-scrollbar { width: 5px; }
@@ -50,7 +50,22 @@
         .modal-img.zoomed { transform: scale(1.5); cursor: zoom-out; }
         
         .modal-img { width: 100%; max-height: 400px; object-fit: contain; flex-shrink: 0; cursor: zoom-in; transition: transform 0.3s; }
-        .modal-body { padding: 30px; }
+        .modal-body { 
+            padding: 30px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            flex: 1;
+        }
+        .modal-body-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .modal-body-footer {
+            flex-shrink: 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
         .modal-category { font-size: 11px; font-weight: 700; color: var(--accent-seafoam); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
         .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 10px; color: #fff; line-height: 1.2; }
         .modal-price { font-size: 20px; color: var(--accent-seafoam); font-weight: 700; margin-bottom: 15px; }
@@ -213,11 +228,15 @@
             <button type="button" class="close-modal" onclick="closeProductModal()">&times;</button>
             <img id="modal-img" src="" class="modal-img" onclick="event.stopPropagation(); toggleZoom()">
             <div class="modal-body">
-                <div id="modal-cat" class="modal-category">КАТЕГОРІЯ</div>
-                <h2 id="modal-title" class="modal-title">Назва</h2>
-                <div id="modal-price" class="modal-price">0 грн</div>
-                <p id="modal-desc" class="modal-desc"></p>
-                <button class="buy-btn" onclick="addToCart()">КУПИТИ</button>
+                <div class="modal-body-content">
+                    <div id="modal-cat" class="modal-category">КАТЕГОРІЯ</div>
+                    <h2 id="modal-title" class="modal-title">Назва</h2>
+                    <div id="modal-price" class="modal-price">0 грн</div>
+                    <p id="modal-desc" class="modal-desc"></p>
+                </div>
+                <div class="modal-body-footer">
+                    <button class="buy-btn" onclick="addToCart()">КУПИТИ</button>
+                </div>
             </div>
         </div>
     </div>
@@ -504,4 +523,3 @@
     </div>
 </body>
 </html>
-
