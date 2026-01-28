@@ -184,8 +184,18 @@
             <button onclick="addCategory()">Додати категорію</button>
         </div>
         <div id="category-list"></div>
+    <div class="form-card">
+        <h2>Управління контактами</h2>
+        <div class="form-group">
+            <label>Посилання на Телеграм</label>
+            <input type="text" id="contact-telegram" placeholder="https://t.me/...">
+        </div>
+        <div class="form-group">
+            <label>Посилання на Інстаграм</label>
+            <input type="text" id="contact-instagram" placeholder="https://instagram.com/...">
+        </div>
+        <button onclick="saveContacts()">Зберегти контакти</button>
     </div>
-
 </div>
 
 <script>
@@ -489,7 +499,22 @@
         });
     }
 
+    // Контакти
+    db.ref('contacts').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        document.getElementById('contact-telegram').value = data.telegram || '';
+        document.getElementById('contact-instagram').value = data.instagram || '';
+    });
 
+    window.saveContacts = () => {
+        const contacts = {
+            telegram: document.getElementById('contact-telegram').value,
+            instagram: document.getElementById('contact-instagram').value
+        };
+        db.ref('contacts').set(contacts)
+            .then(() => alert('Контакти збережено!'))
+            .catch(err => alert('Помилка: ' + err.message));
+    };
 </script>
 </body>
 </html>
