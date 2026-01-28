@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel — Energy Bar</title>
+    <title>Admin Panel — PhytoLab</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
@@ -76,6 +76,28 @@
         .actions { display: flex; gap: 10px; margin-top: 10px; }
         .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         .btn-edit { background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        .category-item-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+        .category-controls {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-move { background: #6366f1; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .btn-move:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -91,7 +113,7 @@
 </script>
 
 <div class="admin-container">
-    <h1>Управління Energy Bar ⚙️</h1>
+    <h1>Управління PhytoLab ⚙️</h1>
     <p><a href="index.html" style="color: var(--accent-seafoam); text-decoration: none;">← На головну сторінку</a></p>
     
     <div class="form-card">
@@ -424,19 +446,36 @@
         }
     };
 
+    window.moveCategory = (index, direction) => {
+        if (direction === -1 && index > 0) {
+            // Переместить вверх
+            [categories[index], categories[index - 1]] = [categories[index - 1], categories[index]];
+            db.ref('categories').set(categories);
+        } else if (direction === 1 && index < categories.length - 1) {
+            // Переместить вниз
+            [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
+            db.ref('categories').set(categories);
+        }
+    };
+
     function renderCategoryList() {
         const container = document.getElementById('category-list');
         container.innerHTML = '';
         categories.forEach((cat, index) => {
             const div = document.createElement('div');
-            div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '10px'; div.style.padding = '10px'; div.style.background = 'rgba(0,0,0,0.2)'; div.style.borderRadius = '8px';
-            
-            let buttons = `<div style="display:flex; gap:5px;">`;
-            if (index > 0) buttons += `<button style="background: #3b82f6; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;" onclick="moveCategoryUp('${cat}')">↑</button>`;
-            if (index < categories.length - 1) buttons += `<button style="background: #3b82f6; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;" onclick="moveCategoryDown('${cat}')">↓</button>`;
-            buttons += `<button onclick="removeCategory('${cat}')" style="background: #ef4444; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer;">Видалити</button></div>`;
-            
-            div.innerHTML = `<span style="flex:1;">${cat}</span>${buttons}`;
+            div.className = 'category-item';
+            const moveUp = index > 0;
+            const moveDown = index < categories.length - 1;
+            div.innerHTML = `
+                <div class="category-item-text">
+                    <span style="font-weight: 600;">${cat}</span>
+                </div>
+                <div class="category-controls">
+                    <button class="btn-move" onclick="moveCategory(${index}, -1)" ${!moveUp ? 'disabled' : ''}>↑</button>
+                    <button class="btn-move" onclick="moveCategory(${index}, 1)" ${!moveDown ? 'disabled' : ''}>↓</button>
+                    <button class="btn-delete" onclick="removeCategory('${cat}')">🗑</button>
+                </div>
+            `;
             container.appendChild(div);
         });
     }
