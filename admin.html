@@ -424,24 +424,25 @@
         }
     };
 
+    window.moveCategoryUp = (cat) => {
+        const index = categories.indexOf(cat);
+        if (index > 0) {
+            [categories[index - 1], categories[index]] = [categories[index], categories[index - 1]];
+            db.ref('categories').set(categories);
+        }
+    };
+
+    window.moveCategoryDown = (cat) => {
+        const index = categories.indexOf(cat);
+        if (index < categories.length - 1) {
+            [categories[index], categories[index + 1]] = [categories[index + 1], categories[index]];
+            db.ref('categories').set(categories);
+        }
+    };
+
     function renderCategoryList() {
         const container = document.getElementById('category-list');
         container.innerHTML = '';
-        categories.forEach(cat => {
-            const div = document.createElement('div');
-            div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.marginBottom = '5px';
-            div.innerHTML = `<span>${cat}</span><button onclick="removeCategory('${cat}')">Видалити</button>`;
-            container.appendChild(div);
-        });
-    }
+        categories.forEach((cat, index) => {
+       
 
-    function populateCategorySelect() {
-        const select = document.getElementById('p-category');
-        select.innerHTML = '<option value="">Оберіть категорію</option>';
-        categories.forEach(cat => {
-            select.innerHTML += `<option value="${cat}">${cat}</option>`;
-        });
-    }
-</script>
-</body>
-</html>
