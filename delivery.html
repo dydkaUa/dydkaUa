@@ -200,12 +200,12 @@
             .logo { font-size: 18px; }
             .nav-links {
                 position: absolute; top: 100%; left: 0; width: 100%;
-                background: transparent; backdrop-filter: blur(20px);
+                background: rgba(10, 42, 58, 0.95); backdrop-filter: blur(20px);
                 flex-direction: column; gap: 0; padding: 0;
-                max-height: 0; overflow: hidden; transition: 0.3s ease-out;
+                display: none; overflow: hidden; transition: 0.3s ease-out;
                 border-radius: 20px; border: 1px solid var(--glass-border); margin-top: 10px;
             }
-            .nav-links.active { max-height: 500px; padding: 20px 0; background: rgba(10, 42, 58, 0.95); }
+            .nav-links.active { display: flex; padding: 20px 0; }
             .nav-links li { text-align: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .nav-links li:last-child { border: none; }
             .nav-links a { font-size: 16px; padding: 10px 0; }
