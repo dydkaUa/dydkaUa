@@ -489,4 +489,34 @@
                     <button class="btn-delete" onclick="removeCategory('${cat}')">🗑</button>
                 </div>
             `;
-     
+            container.appendChild(div);
+        });
+    }
+
+    function populateCategorySelect() {
+        const select = document.getElementById('p-category');
+        select.innerHTML = '<option value="">Оберіть категорію</option>';
+        categories.forEach(cat => {
+            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+    }
+
+    // Контакти
+    db.ref('contacts').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        document.getElementById('contact-telegram').value = data.telegram || '';
+        document.getElementById('contact-instagram').value = data.instagram || '';
+    });
+
+    window.saveContacts = () => {
+        const contacts = {
+            telegram: document.getElementById('contact-telegram').value,
+            instagram: document.getElementById('contact-instagram').value
+        };
+        db.ref('contacts').set(contacts)
+            .then(() => alert('Контакти збережено!'))
+            .catch(err => alert('Помилка: ' + err.message));
+    };
+</script>
+</body>
+</html>
