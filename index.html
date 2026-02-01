@@ -179,6 +179,10 @@
         .nav-links a { color: #fff; text-decoration: none; font-size: 13px; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: var(--accent-seafoam); }
 
+        .social-icons { display: flex; gap: 12px; align-items: center; }
+        .social-icon { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0, 206, 209, 0.1); border: 1px solid rgba(0, 206, 209, 0.3); color: #fff; text-decoration: none; font-size: 18px; transition: all 0.3s ease; cursor: pointer; }
+        .social-icon:hover { background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC); color: #0a2a3a; transform: scale(1.1); box-shadow: 0 4px 12px rgba(0, 206, 209, 0.4); }
+
         .hamburger { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 5px; transition: all 0.3s ease; border-radius: 5px; }
         .hamburger:hover { background: rgba(0, 206, 209, 0.1); transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .cart-badge { background: var(--glass-border); padding: 4px 12px; border-radius: 20px; font-size: 14px; }
@@ -308,10 +312,12 @@
             <h2>Виберіть спосіб зв'язку</h2>
             <div class="contact-buttons">
                 <a id="tg-link" href="#" target="_blank" class="contact-btn contact-btn-tg">
-                    <span>📱</span> Телеграм
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295-.045-1.29-.682-4.644-.96-6.7-.196-1.17.682-1.608 1.477-1.295l5.761 2.378c.51.23.657.553.57.894z"/></svg>
+                    <span>Телеграм</span>
                 </a>
                 <a id="ig-link" href="#" target="_blank" class="contact-btn contact-btn-ig">
-                    <span>📷</span> Інстаграм
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/><circle cx="17" cy="7" r="1"/></svg>
+                    <span>Інстаграм</span>
                 </a>
             </div>
         </div>
@@ -342,6 +348,14 @@
                 <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
             <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="social-icons">
+                    <a id="tg-icon" href="#" target="_blank" class="social-icon" title="Телеграм">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295-.045-1.29-.682-4.644-.96-6.7-.196-1.17.682-1.608 1.477-1.295l5.761 2.378c.51.23.657.553.57.894z"/></svg>
+                    </a>
+                    <a id="ig-icon" href="#" target="_blank" class="social-icon" title="Інстаграм">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/><circle cx="17" cy="7" r="1"/></svg>
+                    </a>
+                </div>
                 <button class="hamburger" onclick="toggleMenu()">☰</button>
             </div>
         </nav>
@@ -558,6 +572,9 @@
                 telegram: data.telegram || '#',
                 instagram: data.instagram || '#'
             };
+            // Update header social icons
+            document.getElementById('tg-icon').href = contacts.telegram;
+            document.getElementById('ig-icon').href = contacts.instagram;
         });
 
         onValue(ref(db, 'newArrivals'), (snapshot) => {
