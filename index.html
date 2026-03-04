@@ -287,12 +287,72 @@
         .p-price { color: var(--accent-seafoam); font-weight: 700; font-size: 20px; }
 
         /* --- КАТЕГОРІЇ --- */
-        .categories-section { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; text-align: center; }
-        .categories-section h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 40px; font-weight: 700; }
-        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .category-btn { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; color: var(--text-light); font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .category-btn:hover { background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC); color: #0a2a3a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 206, 209, 0.4); }
-        .category-btn.active { background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC); color: #0a2a3a; box-shadow: 0 4px 15px rgba(0, 206, 209, 0.5); }
+        .categories-section { max-width: 1200px; margin: 0 auto 40px; padding: 0 20px; text-align: center; }
+        .categories-section h2 { font-size: 22px; text-transform: uppercase; margin-bottom: 20px; font-weight: 700; }
+        .categories-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
+        }
+        .dropdown-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dropdown-btn:hover {
+            background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
+            color: #0a2a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 206, 209, 0.4);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #0a2a3a;
+            min-width: 100%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            z-index: 100;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 8px;
+        }
+        .dropdown-content.show { display: block; }
+        .dropdown-item {
+            color: var(--text-light);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
+        }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
+            color: #0a2a3a;
+            padding-left: 25px;
+        }
+        .dropdown-item.active {
+            background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
+            color: #0a2a3a;
+        }
+        .dropdown-content::-webkit-scrollbar { width: 6px; }
+        .dropdown-content::-webkit-scrollbar-thumb { background: var(--accent-seafoam); border-radius: 10px; }
         .category-products { margin-top: 40px; }
         .advantages h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 50px; font-weight: 700; text-align: center; }
         .adv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
@@ -458,7 +518,13 @@
 
         <section id="categories" class="categories-section">
             <h2>КАТЕГОРІЇ ТОВАРІВ</h2>
-            <div class="categories-grid">
+            <div class="categories-dropdown">
+                <button class="dropdown-btn" onclick="toggleCategoryDropdown()">
+                    <span id="selected-category">Виберіть категорію</span>
+                    <span>▼</span>
+                </button>
+                <div id="categories-grid" class="dropdown-content">
+                </div>
             </div>
             <div class="category-products" id="category-products"></div>
         </section>
@@ -515,6 +581,22 @@
 
         window.toggleMenu = () => document.getElementById('main-menu').classList.toggle('active');
         window.closeMenu = () => document.getElementById('main-menu').classList.remove('active');
+
+        window.toggleCategoryDropdown = () => {
+            document.getElementById('categories-grid').classList.toggle('show');
+        };
+
+        window.closeCategoryDropdown = () => {
+            document.getElementById('categories-grid').classList.remove('show');
+        };
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.querySelector('.categories-dropdown');
+            if (!dropdown.contains(e.target)) {
+                closeCategoryDropdown();
+            }
+        });
 
         window.openProduct = (id) => {
             const p = cachedProducts[id];
@@ -628,29 +710,33 @@
         }
 
         window.filterByCategory = (category, btnEl) => {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dropdown-item').forEach(btn => btn.classList.remove('active'));
             if (btnEl) btnEl.classList.add('active');
             else {
-                const found = Array.from(document.querySelectorAll('.category-btn')).find(b => b.textContent === category);
+                const found = Array.from(document.querySelectorAll('.dropdown-item')).find(b => b.textContent === category);
                 if (found) found.classList.add('active');
             }
             showProductsByCategory(category);
         };
 
         function renderCategories() {
-            const grid = document.querySelector('.categories-grid');
+            const grid = document.getElementById('categories-grid');
             grid.innerHTML = '';
             categories.forEach(cat => {
-                const btn = document.createElement('div');
-                btn.className = 'category-btn';
-                btn.textContent = cat;
-                btn.onclick = (e) => filterByCategory(cat, e.currentTarget);
-                grid.appendChild(btn);
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = cat;
+                item.onclick = (e) => {
+                    filterByCategory(cat, e.currentTarget);
+                    document.getElementById('selected-category').innerText = cat;
+                    closeCategoryDropdown();
+                };
+                grid.appendChild(item);
             });
             // Auto-select first category if exists
             if (categories.length > 0) {
                 setTimeout(() => {
-                    const first = grid.querySelector('.category-btn');
+                    const first = grid.querySelector('.dropdown-item');
                     if (first) first.click();
                 }, 50);
             }
