@@ -69,7 +69,48 @@
         .modal-category { font-size: 11px; font-weight: 700; color: var(--accent-seafoam); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
         .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 10px; color: #fff; line-height: 1.2; }
         .modal-price { font-size: 20px; color: var(--accent-seafoam); font-weight: 700; margin-bottom: 15px; }
-        .modal-desc { font-size: 14px; color: #ccc; margin-bottom: 25px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
+        .stock-status {
+            display: inline-block; padding: 8px 15px; border-radius: 8px; font-size: 12px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+        .stock-available { background: rgba(129, 199, 132, 0.2); color: #81c784; border: 1px solid #81c784; }
+        .stock-unavailable { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; }
+        .modal-desc { 
+            font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.6; 
+            white-space: pre-wrap; word-wrap: break-word;
+            max-height: 110px; overflow: hidden; transition: max-height 0.4s ease;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        .modal-desc.expanded { max-height: 600px; }
+        .modal-desc::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 42, 58, 0.8) 100%);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-desc.expanded::after { opacity: 0; }
+        .desc-toggle-btn {
+            background: linear-gradient(135deg, rgba(0, 206, 209, 0.15), rgba(72, 209, 204, 0.1));
+            border: 1px solid var(--accent-seafoam);
+            color: var(--accent-seafoam); padding: 12px 18px; border-radius: 12px;
+            font-size: 13px; cursor: pointer; font-weight: 700; transition: all 0.3s ease;
+            display: none; margin-bottom: 20px; width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .desc-toggle-btn:hover {
+            background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
+            color: #0a2a3a; box-shadow: 0 6px 18px rgba(0, 206, 209, 0.5);
+            transform: translateY(-2px);
+        }
+        .desc-toggle-btn.active { display: inline-block; }
         
         .buy-btn {
             width: 100%; padding: 15px; background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
@@ -78,6 +119,27 @@
             box-shadow: 0 4px 15px rgba(0, 206, 209, 0.3);
         }
         .buy-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 206, 209, 0.5); background: linear-gradient(135deg, #48D1CC, var(--accent-seafoam)); }
+        .buy-btn:disabled {
+            opacity: 0.5; cursor: not-allowed; transform: none;
+            background: linear-gradient(135deg, #666, #888);
+            box-shadow: 0 4px 15px rgba(100, 100, 100, 0.3);
+        }
+        .consult-btn {
+            width: 100%; padding: 15px; background: linear-gradient(135deg, #9c27b0, #ba68c8);
+            color: #fff; border: none; border-radius: 15px;
+            font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+        }
+        .consult-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(156, 39, 176, 0.5); background: linear-gradient(135deg, #ba68c8, #9c27b0); }
+        .consult-btn:disabled {
+            opacity: 0.5; cursor: not-allowed; transform: none;
+            background: linear-gradient(135deg, #666, #888);
+            box-shadow: 0 4px 15px rgba(100, 100, 100, 0.3);
+        }
+        .btn-group {
+            display: flex; gap: 12px; width: 100%;
+        }
+        .btn-group button { flex: 1; }
         .close-modal {
             position: absolute; top: 15px; right: 20px; font-size: 35px;
             color: white; cursor: pointer; z-index: 1000; text-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -302,10 +364,15 @@
                     <div id="modal-cat" class="modal-category">КАТЕГОРІЯ</div>
                     <h2 id="modal-title" class="modal-title">Назва</h2>
                     <div id="modal-price" class="modal-price">0 грн</div>
+                    <div id="stock-status" class="stock-status stock-available">✓ В НАЯВНОСТІ</div>
+                    <button id="desc-toggle" class="desc-toggle-btn" onclick="toggleDescription()">ПОКАЗАТИ ОПИСАННЯ</button>
                     <p id="modal-desc" class="modal-desc"></p>
                 </div>
                 <div class="modal-body-footer">
-                    <button class="buy-btn" onclick="showContactModal()">КУПИТИ</button>
+                    <div class="btn-group">
+                        <button class="buy-btn" onclick="showContactModal()">КУПИТИ</button>
+                        <button class="consult-btn" onclick="showContactModal()">КОНСУЛЬТАЦІЯ</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -341,7 +408,7 @@
 
     <header>
         <div class="top-bar">
-            <span>phytolab420@gmail.com</span>
+            <span>Перший центр легального задоволення</span>
             <span></span>
         </div>
         <nav class="navbar">
@@ -350,7 +417,7 @@
                 <li><a href="#" id="home-link" onclick="closeMenu()">Головна</a></li>
                 <li><a href="#categories" onclick="goToCategories()">Магазин</a></li>
                 <li><a href="delivery.html" onclick="closeMenu()">Доставка</a></li>
-                
+                <li><a href="#" onclick="closeMenu()">Контакти</a></li>
             </ul>
             <div style="display: flex; align-items: center; gap: 15px;">
                 <div class="social-icons">
@@ -440,12 +507,52 @@
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-price').innerText = p.price + ' грн';
             document.getElementById('modal-img').src = p.img;
-            document.getElementById('modal-desc').innerText = p.description || p.desc || '';
+            const descText = p.description || p.desc || '';
+            document.getElementById('modal-desc').innerText = descText;
             document.getElementById('modal-cat').innerText = p.category || 'Загальне';
+            
+            // Setup stock status
+            const stockStatus = document.getElementById('stock-status');
+            const buyBtn = document.querySelector('.buy-btn');
+            const consultBtn = document.querySelector('.consult-btn');
+            const isAvailable = p.inStock !== false; // Default to available if not specified
+            
+            if (isAvailable) {
+                stockStatus.className = 'stock-status stock-available';
+                stockStatus.innerText = '✓ В НАЯВНОСТІ';
+                buyBtn.disabled = false;
+                consultBtn.disabled = false;
+            } else {
+                stockStatus.className = 'stock-status stock-unavailable';
+                stockStatus.innerText = '✗ НЕМАЄ В НАЯВНОСТІ';
+                buyBtn.disabled = true;
+                consultBtn.disabled = true;
+            }
+            
+            // Setup description toggle
+            const descEl = document.getElementById('modal-desc');
+            const toggleBtn = document.getElementById('desc-toggle');
+            
+            // Always show button if there's description text
+            if (descText.trim().length > 0) {
+                toggleBtn.classList.add('active');
+                toggleBtn.innerText = 'ПОКАЗАТИ БІЛЬШЕ ▼';
+                descEl.classList.remove('expanded');
+            } else {
+                toggleBtn.classList.remove('active');
+            }
+            
             document.getElementById('product-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden'; 
             // Reset zoom
             document.getElementById('modal-img').classList.remove('zoomed');
+        };
+
+        window.toggleDescription = () => {
+            const descEl = document.getElementById('modal-desc');
+            const toggleBtn = document.getElementById('desc-toggle');
+            descEl.classList.toggle('expanded');
+            toggleBtn.innerText = descEl.classList.contains('expanded') ? 'СКРИТИ ▲' : 'ПОКАЗАТИ БІЛЬШЕ ▼';
         };
 
         window.toggleZoom = () => {
@@ -639,5 +746,4 @@
     </div>
 </body>
 </html>
-
 
