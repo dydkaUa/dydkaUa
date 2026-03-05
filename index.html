@@ -256,18 +256,18 @@
 
         /* --- ТОП-КНОПКИ --- */
         .top-buttons-section { max-width: 1200px; margin: 40px auto 20px; padding: 0 20px; text-align: center; }
-        .top-buttons { display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; max-width: 500px; margin: 0 auto; }
-        .top-btn { display: inline-block; padding: 8px 16px; background: var(--glass); border: 1px solid var(--glass-border);
-            color: var(--text-light); border-radius: 15px; font-size: 12px; font-weight: 600;
+        .top-buttons { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; width: 100%; }
+        .top-btn { display: inline-block; padding: 6px 12px; background: var(--glass); border: 1px solid var(--glass-border);
+            color: var(--text-light); border-radius: 15px; font-size: 11px; font-weight: 600;
             cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;
-            text-decoration: none;
+            text-decoration: none; flex: 1;
         }
         .top-btn:hover { background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC); color: #0a2a3a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 206, 209, 0.4); }
         .news-btn-small, .grower-btn-small { background: linear-gradient(135deg, #9c27b0, #ba68c8); }
         .news-btn-small:hover, .grower-btn-small:hover { background: linear-gradient(135deg, #ba68c8, #9c27b0); box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4); }
         @media (max-width: 768px) {
-            .top-btn { padding: 6px 12px; font-size: 10px; }
-            .top-buttons { justify-content: space-between; }
+            .top-btn { padding: 6px 12px; font-size: 10px; flex: 1; margin: 0 5px; }
+            .top-buttons { justify-content: space-between; flex-wrap: nowrap; }
         }
 
         /* --- СЕКЦІЯ ТОВАРІВ (3 В РЯД) --- */
