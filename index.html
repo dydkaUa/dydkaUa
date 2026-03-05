@@ -256,7 +256,7 @@
 
         /* --- ТОП-КНОПКИ --- */
         .top-buttons-section { max-width: 1200px; margin: 40px auto 20px; padding: 0 20px; text-align: center; }
-        .top-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .top-buttons { display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; max-width: 500px; margin: 0 auto; }
         .top-btn { display: inline-block; padding: 8px 16px; background: var(--glass); border: 1px solid var(--glass-border);
             color: var(--text-light); border-radius: 15px; font-size: 12px; font-weight: 600;
             cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;
@@ -267,6 +267,7 @@
         .news-btn-small:hover, .grower-btn-small:hover { background: linear-gradient(135deg, #ba68c8, #9c27b0); box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4); }
         @media (max-width: 768px) {
             .top-btn { padding: 6px 12px; font-size: 10px; }
+            .top-buttons { justify-content: space-between; }
         }
 
         /* --- СЕКЦІЯ ТОВАРІВ (3 В РЯД) --- */
