@@ -370,12 +370,93 @@
         .dropdown-content::-webkit-scrollbar { width: 6px; }
         .dropdown-content::-webkit-scrollbar-thumb { background: var(--accent-seafoam); border-radius: 10px; }
         .category-products { margin-top: 40px; }
-        .advantages h2 { font-size: 26px; text-transform: uppercase; margin-bottom: 50px; font-weight: 700; text-align: center; }
-        .adv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
-        .adv-item { display: flex; flex-direction: column; align-items: center; }
-        .adv-icon-circle { width: 90px; height: 90px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
-        .adv-icon-circle svg { width: 35px; height: 35px; stroke: white; }
-        .adv-item p { font-size: 13px; color: #bbb; line-height: 1.4; text-align: center; }
+        .advantages {
+            background: rgba(0,0,0,0.2);
+            padding: 60px 30px;
+            border-radius: 30px;
+            margin: 0 auto 80px;
+            max-width: 1100px;
+        }
+        .advantages h2 {
+            font-size: 28px;
+            text-transform: none;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--accent-seafoam);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .advantages h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 120%;
+            height: 4px;
+            background: var(--accent-seafoam);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .adv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+        .adv-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 25px 15px;
+            border-radius: 25px;
+            transition: transform 0.3s, background 0.3s;
+            text-align: center;
+        }
+        .adv-item:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.2);
+        }
+        .adv-icon-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .adv-icon-circle:hover {
+            background: linear-gradient(135deg, var(--accent-seafoam), #48D1CC);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+        .adv-icon-circle svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--accent-seafoam);
+            transition: stroke 0.3s, fill 0.3s;
+        }
+        .adv-icon-circle:hover svg {
+            stroke: #fff;
+            fill: #fff;
+        }
+        .adv-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .adv-item p {
+            font-size: 14px;
+            color: #e0f7fa;
+            line-height: 1.4;
+        }
 
         /* --- ТАБИ --- */
         .tabs-section { display: flex; flex-direction: column; align-items: center; margin-top: 40px; margin-bottom: 100px; }
@@ -552,13 +633,35 @@
         </section>
 
         <section class="advantages">
-            <h2>ЧОМУ МИ? НАШІ ПЕРЕВАГИ</h2>
+            <h2>Чому саме ми?</h2>
             <div class="adv-grid">
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p>Швидка Відправка</p></div>
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><p>Якісний сервіс</p></div>
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0118 0z"/></svg></div><p>Низька ціна</p></div>
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div><p>Широкий вибір</p></div>
-                <div class="adv-item"><div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg></div><p>Власне виробництво</p></div>
+                <div class="adv-item">
+                    <div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                    <h3>Швидка відправка</h3>
+                    <p>Обробка замовлень протягом години з моменту підтвердження.</p>
+                </div>
+                <div class="adv-item">
+                    <div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                    <h3>Якісний сервіс</h3>
+                    <p>Підтримка 24/7 та гарантія повернення коштів.</p>
+                </div>
+                <div class="adv-item">
+                    <div class="adv-icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0118 0z"/></svg></div>
+                    <h3>Низька ціна</h3>
+                    <p>Конкурентні ціни без прихованих комісій.</p>
+                </div>
+                <div class="adv-item">
+                    <div class="adv-icon-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                        </svg>
+                    </div>
+                    <h3>Широкий вибір</h3>
+                    <p>Сотні позицій із різними характеристиками та брендами.</p>
+                </div>
             </div>
         </section>
 
