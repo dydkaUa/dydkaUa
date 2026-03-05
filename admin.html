@@ -199,6 +199,33 @@
         </div>
         <button onclick="saveContacts()">Зберегти контакти</button>
     </div>
+
+    <div class="form-card">
+        <h2>Управління новинами</h2>
+        <form id="news-form">
+            <input type="hidden" id="news-edit-id">
+            <div class="form-group">
+                <label>Тип новини</label>
+                <select id="news-type" required>
+                    <option value="">Оберіть тип</option>
+                    <option value="world">Новини в світі канабісу</option>
+                    <option value="grow">Інформація для грову</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Текст</label>
+                <textarea id="news-text" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Посилання на фото (URL)</label>
+                <input type="text" id="news-img" placeholder="https://...">
+            </div>
+            <button type="submit" id="news-submit-btn">Зберегти новину</button>
+            <button type="button" id="news-cancel-btn" style="display:none; background:#555; color:white;">Відмінити</button>
+        </form>
+        <h3>Список новин</h3>
+        <div id="admin-news-list"></div>
+    </div>
 </div>
 
 <script>
@@ -521,6 +548,86 @@
             .then(() => alert('Контакти збережено!'))
             .catch(err => alert('Помилка: ' + err.message));
     };
+
+    // ===== Новини для двох категорій =====
+    let cachedNews = {};
+
+    function fetchNews() {
+        db.ref('news').on('value', snapshot => {
+            cachedNews = snapshot.val() || {};
+            renderNewsList();
+        });
+    }
+
+    function renderNewsList() {
+        const container = document.getElementById('admin-news-list');
+        container.innerHTML = '';
+        Object.keys(cachedNews).forEach(id => {
+            const n = cachedNews[id];
+            const div = document.createElement('div');
+            div.style.display='flex'; div.style.justifyContent='space-between'; div.style.alignItems='center'; div.style.marginBottom='5px';
+            const title = n.type === 'grow' ? 'Інфо для грову' : 'Світ канабісу';
+            div.innerHTML = `<span>[${title}] ${n.text.substring(0,50)}${n.text.length>50?'...':''}</span>
+                <div>
+                    <button onclick="prepareNewsEdit('${id}')">✎</button>
+                    <button onclick="deleteNews('${id}')">🗑</button>
+                </div>`;
+            container.appendChild(div);
+        });
+    }
+
+    document.getElementById('news-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const id = document.getElementById('news-edit-id').value;
+        const newsData = {
+            type: document.getElementById('news-type').value,
+            text: document.getElementById('news-text').value,
+            img: document.getElementById('news-img').value || '',
+            timestamp: Date.now()
+        };
+        if (!newsData.type || !newsData.text) return;
+        if (id) {
+            db.ref('news/' + id).update(newsData).then(() => {
+                alert('Новину оновлено');
+                resetNewsForm();
+            });
+        } else {
+            db.ref('news').push(newsData).then(() => {
+                alert('Новину додано');
+                resetNewsForm();
+            });
+        }
+    });
+
+    function resetNewsForm() {
+        document.getElementById('news-form').reset();
+        document.getElementById('news-edit-id').value='';
+        document.getElementById('news-submit-btn').innerText = 'Зберегти новину';
+        document.getElementById('news-cancel-btn').style.display='none';
+    }
+
+    document.getElementById('news-cancel-btn').onclick = resetNewsForm;
+
+    window.prepareNewsEdit = id => {
+        const n = cachedNews[id];
+        if (!n) return;
+        document.getElementById('news-type').value = n.type;
+        document.getElementById('news-text').value = n.text;
+        document.getElementById('news-img').value = n.img || '';
+        document.getElementById('news-edit-id').value = id;
+        document.getElementById('news-submit-btn').innerText = 'Оновити новину';
+        document.getElementById('news-cancel-btn').style.display='inline-block';
+        window.scrollTo({top:0,behavior:'smooth'});
+    };
+
+    window.deleteNews = id => {
+        if (confirm('Видалити цю новину?')) {
+            db.ref('news/' + id).remove();
+        }
+    };
+
+    // Запуск додаткових fetch
+    fetchNews();
 </script>
 </body>
 </html>
