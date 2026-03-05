@@ -147,9 +147,6 @@
                     <option value="ВІДПОЧИНОК">ВІДПОЧИНОК</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label><input type="checkbox" id="p-instock"> В наявності</label>
-            </div>
             <button type="submit" id="submit-btn">Зберегти товар</button>
             <button type="button" id="cancel-btn" style="display:none; background:#555; color: white;">Відмінити</button>
         </form>
@@ -187,29 +184,8 @@
             <button onclick="addCategory()">Додати категорію</button>
         </div>
         <div id="category-list"></div>
-    <div class="form-card">        <h2>Управління новинами</h2>
-        <form id="news-form">
-            <input type="hidden" id="news-edit-id">
-            <div class="form-group">
-                <label>Заголовок</label>
-                <input type="text" id="news-title" required placeholder="Заголовок новини">
-            </div>
-            <div class="form-group">
-                <label>Текст</label>
-                <textarea id="news-text" rows="4" placeholder="Текст новини..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Посилання на фото (URL)</label>
-                <input type="text" id="news-img" placeholder="https://...">
-            </div>
-            <button type="submit" id="news-submit">Додати новину</button>
-            <button type="button" id="news-cancel" style="display:none; background:#555; color:white;">Відмінити</button>
-        </form>
-        <h3 style="margin-top:30px;">Існуючі новини</h3>
-        <div id="news-list">Завантаження...</div>
-    </div>
-
-    <div class="form-card">        <h2>Управління контактами</h2>
+    <div class="form-card">
+        <h2>Управління контактами</h2>
         <div class="form-group">
             <label>Посилання на Телеграм</label>
             <input type="text" id="contact-telegram" placeholder="https://t.me/...">
@@ -291,7 +267,6 @@
             img: document.getElementById('p-img').value,
             description: document.getElementById('p-desc').value,
             category: document.getElementById('p-category').value,
-            inStock: document.getElementById('p-instock').checked,
             timestamp: Date.now()
         };
 
@@ -323,7 +298,6 @@
             document.getElementById('p-img').value = p.img || '';
             document.getElementById('p-desc').value = p.description || p.desc || '';
             document.getElementById('p-category').value = p.category || '';
-            document.getElementById('p-instock').checked = p.inStock !== false;
             document.getElementById('edit-id').value = id;
             
             document.getElementById('form-title').innerText = "Редагувати товар";
@@ -532,93 +506,10 @@
         document.getElementById('contact-instagram').value = data.instagram || '';
     });
 
-    // News management
-    let cachedNews = {};
-    const newsForm = document.getElementById('news-form');
-    const newsListEl = document.getElementById('news-list');
-
-    function fetchNews() {
-        db.ref('news').on('value', snapshot => {
-            const data = snapshot.val() || {};
-            cachedNews = data;
-            renderNewsList();
-        });
-    }
-
-    function renderNewsList() {
-        newsListEl.innerHTML = '';
-        const keys = Object.keys(cachedNews);
-        if (keys.length === 0) {
-            newsListEl.innerHTML = '<p>Новин поки що немає</p>';
-            return;
-        }
-        keys.forEach(id => {
-            const n = cachedNews[id];
-            const div = document.createElement('div');
-            div.className = 'item-card';
-            div.innerHTML = `
-                <h4>${n.title || ''}</h4>
-                <p>${n.text || ''}</p>
-                ${n.img ? `<img src="${n.img}" onerror="this.src='https://via.placeholder.com/150'" style="margin-top:10px;"/>` : ''}
-                <div class="actions">
-                    <button class="btn-edit" onclick="prepareNewsEdit('${id}')">✎</button>
-                    <button class="btn-delete" onclick="deleteNews('${id}')">🗑</button>
-                </div>
-            `;
-            newsListEl.appendChild(div);
-        });
-    }
-
-    newsForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = document.getElementById('news-edit-id').value;
-        const newsData = {
-            title: document.getElementById('news-title').value,
-            text: document.getElementById('news-text').value,
-            img: document.getElementById('news-img').value,
-            timestamp: Date.now()
-        };
-        if (id) {
-            db.ref('news/' + id).update(newsData).then(() => {
-                alert('Новину оновлено');
-                resetNewsForm();
-            });
-        } else {
-            db.ref('news').push(newsData).then(() => {
-                alert('Новину додано');
-                resetNewsForm();
-            });
-        }
-    });
-
-    window.prepareNewsEdit = (id) => {
-        const n = cachedNews[id];
-        if (!n) return;
-        document.getElementById('news-title').value = n.title || '';
-        document.getElementById('news-text').value = n.text || '';
-        document.getElementById('news-img').value = n.img || '';
-        document.getElementById('news-edit-id').value = id;
-        document.getElementById('news-submit').innerText = 'Оновити';
-        document.getElementById('news-cancel').style.display = 'inline-block';
-    };
-
-    window.deleteNews = (id) => {
-        if (confirm('Видалити цю новину?')) {
-            db.ref('news/' + id).remove();
-        }
-    };
-
-    function resetNewsForm() {
-        newsForm.reset();
-        document.getElementById('news-edit-id').value = '';
-        document.getElementById('news-submit').innerText = 'Додати новину';
-        document.getElementById('news-cancel').style.display = 'none';
-    }
-
-    document.getElementById('news-cancel').onclick = resetNewsForm;
-
-    // start news fetch
-    fetchNews();
+    window.saveContacts = () => {
+        const contacts = {
+            telegram: document.getElementById('contact-telegram').value,
+            instagram: document.getElementById('contact-instagram').value
         };
         db.ref('contacts').set(contacts)
             .then(() => alert('Контакти збережено!'))
